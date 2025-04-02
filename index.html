@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A-Zentrix</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Space+Grotesk:wght@300;400;500;600;700&family=Alternate+Gothic+FS:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#8A2BE2",
+              secondary: "#00FFFF",
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      :where([class^="ri-"])::before {
+        content: "\f3c2";
+      }
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background-image: url("https://public.readdy.ai/ai/img_res/d280431e8dffca38c7beef0212085d59.jpg");
+        background-size: cover;
+        background-position: center;
+        color: white;
+        background-attachment: fixed;
+        position: relative;
+      }
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(10, 10, 20, 0.92) 0%,
+          rgba(15, 15, 35, 0.92) 100%
+        );
+        z-index: -1;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .gradient-text {
+        background: linear-gradient(90deg, #8a2be2, #00ffff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .logo-gradient {
+        background: linear-gradient(90deg, #ff69b4, #00bfff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .glow {
+        box-shadow: 0 0 25px rgba(138, 43, 226, 0.35);
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      }
+
+      /* Mobile Menu */
+      .mobile-menu {
+        display: none;
+      }
+      .mobile-menu-btn {
+        display: none;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 1024px) {
+        .nav-links,
+        .nav-buttons {
+          display: none;
+        }
+        .mobile-menu-btn {
+          display: block;
+        }
+        #about .grid {
+          grid-template-columns: 1fr;
+        }
+        #services .grid,
+        #blog .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        #about .grid,
+        #contact .grid {
+          grid-template-columns: 1fr;
+        }
+        footer .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        #services .grid,
+        #blog .grid,
+        footer .grid {
+          grid-template-columns: 1fr;
+        }
+        .nav {
+          padding: 1rem;
+        }
+        section {
+          padding: 4rem 1rem;
+        }
+        .glass {
+          padding: 1.5rem;
+        }
+        .feature-card {
+          padding: 1.5rem;
+        }
+      }
+
+      @media (max-width: 640px) {
+        h1 {
+          font-size: 1.75rem;
+        }
+        h2 {
+          font-size: 2rem;
+        }
+        #about h2 {
+          font-size: 2.5rem;
+        }
+        .mobile-menu.active {
+          display: flex;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav
+      class="glass fixed w-full z-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-white/5"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center">
+          <h1
+            class="text-2xl sm:text-3xl font-bold logo-gradient tracking-wider"
+            style="font-family: 'Alternate Gothic FS', sans-serif"
+          >
+            A-ZENTRIX
+          </h1>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden lg:flex gap-8 nav-links">
+          <a
+            href="#"
+            class="hover:text-secondary transition-colors relative group nav-link"
+            data-target="home"
+          >
+            Home
+            <span
+              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
+            ></span>
+          </a>
+          <a
+            href="#about"
+            class="hover:text-secondary transition-colors relative group nav-link"
+            data-target="about"
+          >
+            About
+            <span
+              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
+            ></span>
+          </a>
+          <a
+            href="#services"
+            class="hover:text-secondary transition-colors relative group nav-link"
+            data-target="services"
+          >
+            Services
+            <span
+              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
+            ></span>
+          </a>
+          <a
+            href="#blog"
+            class="hover:text-secondary transition-colors relative group nav-link"
+            data-target="blog"
+          >
+            Blog
+            <span
+              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
+            ></span>
+          </a>
+          <a
+            href="#contact"
+            class="hover:text-secondary transition-colors relative group nav-link"
+            data-target="contact"
+          >
+            Contact
+            <span
+              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
+            ></span>
+          </a>
+        </div>
+
+        <!-- Desktop Buttons -->
+        <div class="hidden lg:flex items-center gap-4 nav-buttons">
+          <a
+            href="#"
+            class="text-gray-300 hover:text-secondary transition-colors"
+            id="signInBtn"
+            >Sign In</a
+          >
+          <button
+            class="bg-primary px-4 sm:px-6 py-1 sm:py-2 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap glow"
+            id="getStartedBtn"
+          >
+            Get Started
+          </button>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="lg:hidden text-white p-2" id="mobileMenuBtn">
+          <i class="ri-menu-line text-2xl" id="menuIcon"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        class="lg:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-lg py-4 px-6 hidden flex-col gap-4 border-t border-white/5 transition-all duration-300"
+        id="mobileMenu"
+      >
+        <a
+          href="#"
+          class="hover:text-secondary transition-colors py-2 nav-link"
+          data-target="home"
+          >Home</a
+        >
+        <a
+          href="#about"
+          class="hover:text-secondary transition-colors py-2 nav-link"
+          data-target="about"
+          >About</a
+        >
+        <a
+          href="#services"
+          class="hover:text-secondary transition-colors py-2 nav-link"
+          data-target="services"
+          >Services</a
+        >
+        <a
+          href="#blog"
+          class="hover:text-secondary transition-colors py-2 nav-link"
+          data-target="blog"
+          >Blog</a
+        >
+        <a
+          href="#contact"
+          class="hover:text-secondary transition-colors py-2 nav-link"
+          data-target="contact"
+          >Contact</a
+        >
+        <div class="flex gap-4 mt-2">
+          <a
+            href="#"
+            class="text-gray-300 hover:text-secondary transition-colors py-2"
+            id="mobileSignInBtn"
+            >Sign In</a
+          >
+          <button
+            class="bg-primary px-4 py-2 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap glow"
+            id="mobileGetStartedBtn"
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+    </nav>
+    <section
+      id="about"
+      class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
+    >
+      <div class="absolute inset-0 z-0">
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 mix-blend-overlay"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent"
+        ></div>
+      </div>
+      <div
+        class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10 py-12 lg:py-0"
+      >
+        <div class="flex flex-col justify-center order-2 lg:order-1">
+          <h2
+            class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 gradient-text"
+          >
+            A-Zentrix
+          </h2>
+          <p class="text-lg sm:text-xl text-gray-300 mb-8">
+            A-Zentrix delivers cutting-edge AI solutions that revolutionize the way businesses operate. Our innovative technology empowers you to achieve more with less effort, enhancing efficiency, automation, and growth.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a
+              href="#services"
+              class="bg-primary px-8 py-3 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap text-lg glow inline-block text-center"
+              >Explore Our Services</a
+            >
+            <a
+              href="#contact"
+              class="glass px-8 py-3 !rounded-button hover:bg-white/20 transition-colors whitespace-nowrap text-lg inline-block text-center"
+              >Contact Us</a
+            >
+          </div>
+        </div>
+        <div class="relative order-1 lg:order-2">
+          <div
+            class="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-xl opacity-70"
+          ></div>
+          <div
+            class="w-full h-full rounded-2xl glow relative z-10 glass overflow-hidden"
+          >
+            <img
+              src="https://public.readdy.ai/ai/img_res/278be215d29892e43f07b5af7446fe03.jpg"
+              alt="AI Visualization"
+              class="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="services" class="py-16 lg:py-24 relative">
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent"
+      ></div>
+      <div
+        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/40762e632a3ea1fe69238fcfcc06f1b7.jpg')] bg-cover bg-center opacity-15"
+      ></div>
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <h2
+          class="text-3xl lg:text-4xl font-bold text-center mb-12 lg:mb-16 gradient-text"
+        >
+          Our Services
+        </h2>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+        >
+          <div
+            class="feature-card glass p-6 lg:p-8 rounded-2xl transition-all duration-300 border border-white/5"
+          >
+            <div
+              class="w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-gradient-to-br from-primary/30 to-secondary/20 rounded-xl mb-4 lg:mb-6"
+            >
+              <i class="ri-brain-line text-2xl lg:text-3xl text-secondary"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3 lg:mb-4">AI & Machine Learning Solutions</h3>
+            <p class="text-gray-400 text-sm lg:text-base">
+              We develop cutting-edge AI models that enhance automation, decision-making, and efficiency, helping businesses leverage the power of intelligent technology.
+            </p>
+          </div>
+          <div
+            class="feature-card glass p-6 lg:p-8 rounded-2xl transition-all duration-300 border border-white/5"
+          >
+            <div
+              class="w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-gradient-to-br from-primary/30 to-secondary/20 rounded-xl mb-4 lg:mb-6"
+            >
+              <i
+                class="ri-smartphone-line text-2xl lg:text-3xl text-secondary"
+              ></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3 lg:mb-4">Custom Software Development</h3>
+            <p class="text-gray-400 text-sm lg:text-base">
+              From web apps to enterprise solutions, we build high-performance, scalable software tailored to your business needs.
+            </p>
+          </div>
+          <div
+            class="feature-card glass p-6 lg:p-8 rounded-2xl transition-all duration-300 border border-white/5"
+          >
+            <div
+              class="w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-gradient-to-br from-primary/30 to-secondary/20 rounded-xl mb-4 lg:mb-6"
+            >
+              <i class="ri-cloud-line text-2xl lg:text-3xl text-secondary"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3 lg:mb-4">AI-Powered Automation</h3>
+            <p class="text-gray-400 text-sm lg:text-base">
+              Boost productivity by automating repetitive tasks with AI-driven workflows, reducing manual effort and optimizing operations.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="about" class="py-16 lg:py-24 relative">
+      <div
+        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/0266459747ff864a37feece7ce0ad2a3.jpg')] bg-cover bg-center opacity-15"
+      ></div>
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <h2
+          class="text-3xl lg:text-4xl font-bold text-center mb-12 lg:mb-16 gradient-text"
+        >
+          About A-Zentrix
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          <div
+            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-primary/20 transition-all duration-300"
+          >
+            <h3
+              class="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 gradient-text"
+            >
+              Our Story
+            </h3>
+            <p class="text-gray-300 mb-4 lg:mb-6 text-sm lg:text-base">
+              A-Zentrix was founded with a vision to bridge the gap between businesses and AI-driven innovation. We saw the need for smarter, more efficient solutions and set out to develop cutting-edge AI, automation, and software development services that empower businesses to achieve more with less effort.
+            </p>
+            <p class="text-gray-300 text-sm lg:text-base">
+              Today, we continue to push the boundaries of technology, delivering intelligent solutions that transform operations and drive growth. The future is AI, and we’re here to build it.
+            </p>
+          </div>
+          <div
+            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-primary/20 transition-all duration-300"
+          >
+            <h3
+              class="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 gradient-text"
+            >
+              Our Mission & Vision
+            </h3>
+            <div class="mb-4 lg:mb-6">
+              <h4 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">Mission</h4>
+              <p class="text-gray-300 text-sm lg:text-base">
+                At A-Zentrix, our mission is to empower businesses with AI-driven solutions that enhance efficiency, automation, and growth. We strive to bridge the gap between innovation and real-world applications, making cutting-edge technology accessible, scalable, and impactful.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">Vision</h4>
+              <p class="text-gray-300 text-sm lg:text-base">
+                We envision a future where AI seamlessly integrates into every industry, transforming the way businesses operate. Our goal is to be a global leader in AI innovation, driving progress through intelligent automation, data-driven decision-making, and next-generation software solutions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="blog" class="py-16 lg:py-24 relative">
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/5 to-transparent"
+      ></div>
+      <div
+        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/510bc6d302d28b53759eec40fb5f39d2.jpg')] bg-cover bg-center opacity-15"
+      ></div>
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <h2
+          class="text-3xl lg:text-4xl font-bold text-center mb-12 lg:mb-16 gradient-text"
+        >
+          Latest Blog Posts
+        </h2>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+        >
+          <div
+            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-secondary/20 transition-all duration-300"
+          >
+            <div class="mb-4 lg:mb-6 overflow-hidden rounded-xl">
+              <img
+                src="https://public.readdy.ai/ai/img_res/e6b4e927a28d4498f4928c056e9708cb.jpg"
+                alt="Technology Trends"
+                class="w-full h-48 object-cover object-center hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div class="mb-3 lg:mb-4">
+              <span
+                class="text-xs text-secondary bg-secondary/10 px-2 lg:px-3 py-1 rounded-full"
+                >Technology</span
+              >
+              <span class="text-xs text-gray-400 ml-2">March 25, 2025</span>
+            </div>
+            <h3 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">
+              The Future of AI in Business Operations
+            </h3>
+            <p class="text-gray-300 mb-3 lg:mb-4 text-sm lg:text-base">
+              Discover how artificial intelligence is transforming business
+              operations and creating new opportunities for growth and
+              innovation.
+            </p>
+            <a
+              href="#"
+              class="text-secondary hover:underline flex items-center text-sm lg:text-base"
+            >
+              Read More <i class="ri-arrow-right-line ml-1"></i>
+            </a>
+          </div>
+          <div
+            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-secondary/20 transition-all duration-300"
+          >
+            <div class="mb-4 lg:mb-6 overflow-hidden rounded-xl">
+              <img
+                src="https://public.readdy.ai/ai/img_res/733bf06c05045b504507cb897befa560.jpg"
+                alt="Mental Wellness"
+                class="w-full h-48 object-cover object-center hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div class="mb-3 lg:mb-4">
+              <span
+                class="text-xs text-secondary bg-secondary/10 px-2 lg:px-3 py-1 rounded-full"
+                >Wellness</span
+              >
+              <span class="text-xs text-gray-400 ml-2">March 18, 2025</span>
+            </div>
+            <h3 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">
+              5 Ways Technology Can Improve Mental Wellness
+            </h3>
+            <p class="text-gray-300 mb-3 lg:mb-4 text-sm lg:text-base">
+              Explore innovative ways that modern technology can support mental
+              health and enhance overall wellbeing in today's fast-paced world.
+            </p>
+            <a
+              href="#"
+              class="text-secondary hover:underline flex items-center text-sm lg:text-base"
+            >
+              Read More <i class="ri-arrow-right-line ml-1"></i>
+            </a>
+          </div>
+          <div
+            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-secondary/20 transition-all duration-300"
+          >
+            <div class="mb-4 lg:mb-6 overflow-hidden rounded-xl">
+              <img
+                src="https://public.readdy.ai/ai/img_res/a4e4f627d0be9b21b2179c7f2807fdbf.jpg"
+                alt="App Development"
+                class="w-full h-48 object-cover object-center hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div class="mb-3 lg:mb-4">
+              <span
+                class="text-xs text-secondary bg-secondary/10 px-2 lg:px-3 py-1 rounded-full"
+                >Development</span
+              >
+              <span class="text-xs text-gray-400 ml-2">March 10, 2025</span>
+            </div>
+            <h3 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">
+              Building Mobile Apps That Users Love
+            </h3>
+            <p class="text-gray-300 mb-3 lg:mb-4 text-sm lg:text-base">
+              Learn the key principles and best practices for creating mobile
+              applications that deliver exceptional user experiences and drive
+              engagement.
+            </p>
+            <a
+              href="#"
+              class="text-secondary hover:underline flex items-center text-sm lg:text-base"
+            >
+              Read More <i class="ri-arrow-right-line ml-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      id="contact"
+      class="py-12 md:py-16 lg:py-24 relative overflow-hidden"
+    >
+      <div
+        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/8a6879ba8c85154110cb3efe2f4dabe3.jpg')] bg-cover bg-center opacity-20"
+      ></div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div
+          class="glass p-8 sm:p-10 lg:p-12 rounded-xl lg:rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-300 text-center"
+        >
+          <div
+            class="absolute -inset-px rounded-xl lg:rounded-2xl bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 blur-sm -z-10"
+          ></div>
+
+          <h2
+            class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 gradient-text"
+          >
+            Contact Us
+          </h2>
+
+          <p
+            class="text-gray-300 text-lg sm:text-xl max-w-3xl mx-auto mb-8 sm:mb-10"
+          >
+            Have questions about our services or want to discuss your project?
+            Reach out to us using the information below.
+          </p>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-10"
+          >
+            <!-- Address -->
+            <div
+              class="glass p-4 sm:p-5 rounded-lg border border-white/5 hover:border-primary/20 transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 sm:w-14 sm:h-14 mx-auto flex items-center justify-center bg-primary/20 rounded-full mb-3 sm:mb-4"
+              >
+                <i
+                  class="ri-map-pin-line text-secondary text-xl sm:text-2xl"
+                ></i>
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Address</h3>
+              <p class="text-gray-300 text-sm sm:text-base">
+                123 Innovation Drive<br />Tech City, TC 10101
+              </p>
+            </div>
+
+            <!-- Email -->
+            <div
+              class="glass p-4 sm:p-5 rounded-lg border border-white/5 hover:border-primary/20 transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 sm:w-14 sm:h-14 mx-auto flex items-center justify-center bg-primary/20 rounded-full mb-3 sm:mb-4"
+              >
+                <i class="ri-mail-line text-secondary text-xl sm:text-2xl"></i>
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Email</h3>
+              <a
+                href="mailto:contact@a-zentrix.com"
+                class="text-gray-300 hover:text-secondary transition-colors text-sm sm:text-base"
+              >
+              azentrix.tech@gmail.com
+
+              </a>
+            </div>
+
+            <!-- Phone -->
+            <div
+              class="glass p-4 sm:p-5 rounded-lg border border-white/5 hover:border-primary/20 transition-all duration-300"
+            >
+              <div
+                class="w-12 h-12 sm:w-14 sm:h-14 mx-auto flex items-center justify-center bg-primary/20 rounded-full mb-3 sm:mb-4"
+              >
+                <i class="ri-phone-line text-secondary text-xl sm:text-2xl"></i>
+              </div>
+              <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Phone</h3>
+              <a
+                href="tel:+15551234567"
+                class="text-gray-300 hover:text-secondary transition-colors text-sm sm:text-base"
+              >
+                +1 (555) 123-4567
+              </a>
+            </div>
+          </div>
+
+          <!-- Contact Us Button -->
+          <div class="mb-10 sm:mb-12 text-center">
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfPi0A6CNrXp4N0ZlH_Q-in5qNmQtpNXY3fMe0aC2V8_3mOgQ/viewform?usp=header"
+              target="_blank"
+              class="inline-block bg-secondary text-black px-8 py-3 rounded-button hover:opacity-90 transition-opacity font-medium glow"
+            >
+              Contact Us
+            </a>
+          </div>
+
+          <div class="mt-10 sm:mt-12">
+            <h3 class="text-lg sm:text-xl font-bold mb-4 sm:mb-5">
+              Connect With Us
+            </h3>
+            <div class="flex justify-center gap-4 sm:gap-6">
+              <!-- <a
+                href="#"
+                class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
+              >
+                <i
+                  class="ri-facebook-fill text-xl sm:text-2xl text-gray-300 hover:text-secondary"
+                ></i>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
+              >
+                <i
+                  class="ri-twitter-fill text-xl sm:text-2xl text-gray-300 hover:text-secondary"
+                ></i>
+              </a> -->
+              <a
+                href="https://www.linkedin.com/company/a-zentrix/ "
+                class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
+              >
+                <i
+                  class="ri-linkedin-fill text-xl sm:text-2xl text-gray-300 hover:text-secondary"
+                ></i>
+              </a>
+              <a
+                href="https://www.instagram.com/a_zentrix_/"
+                class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
+              >
+                <i
+                  class="ri-instagram-line text-xl sm:text-2xl text-gray-300 hover:text-secondary"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer
+      class="py-8 lg:py-12 glass mt-8 lg:mt-12 border-t border-white/5 relative"
+    >
+      <div
+        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/0d82ea4bfbe76751e451c130a5e5b76a.jpg')] bg-cover bg-center opacity-10"
+      ></div>
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-8 lg:mb-12"
+        >
+          <div>
+            <div class="flex items-center mb-4 lg:mb-6">
+              <h1
+                class="text-xl lg:text-2xl font-bold logo-gradient tracking-wider"
+                style="font-family: 'Alternate Gothic FS', sans-serif"
+              >
+                A-ZENTRIX
+              </h1>
+            </div>
+            <p class="text-gray-400 text-sm lg:text-base">
+              Empowering innovation with cutting-edge technology solutions.
+            </p>
+            <div class="mt-4 lg:mt-6">
+              <button
+                class="bg-white/5 hover:bg-white/10 transition-colors px-3 lg:px-4 py-1 lg:py-2 rounded-full text-xs lg:text-sm flex items-center gap-2 border border-white/10"
+              >
+                <i class="ri-mail-line"></i> Subscribe to Newsletter
+              </button>
+            </div>
+          </div>
+          <div>
+            <h4
+              class="font-bold mb-2 lg:mb-4 text-white/90 text-sm lg:text-base"
+            >
+              Services
+            </h4>
+            <ul
+              class="space-y-2 lg:space-y-3 text-gray-400 text-sm lg:text-base"
+            >
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                AI Solutions
+              </li>
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                Mobile Applications
+              </li>
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                Cloud Services
+              </li>
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                Data Analytics
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="font-bold mb-2 lg:mb-4 text-white/90 text-sm lg:text-base"
+            >
+              Company
+            </h4>
+            <ul
+              class="space-y-2 lg:space-y-3 text-gray-400 text-sm lg:text-base"
+            >
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                About Us
+              </li>
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                Careers
+              </li>
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                Blog
+              </li>
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                Contact
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="font-bold mb-2 lg:mb-4 text-white/90 text-sm lg:text-base"
+            >
+              Support
+            </h4>
+            <ul
+              class="space-y-2 lg:space-y-3 text-gray-400 text-sm lg:text-base"
+            >
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                FAQ
+              </li>
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                Help Center
+              </li>
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                App Support
+              </li>
+              <li class="hover:text-secondary transition-colors cursor-pointer">
+                Contact Support
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="text-center text-gray-400 pt-6 lg:pt-8 border-t border-white/10 text-xs lg:text-sm"
+        >
+          <div
+            class="flex flex-col lg:flex-row justify-between items-center gap-4"
+          >
+            <p>&copy; 2025 A-Zentrix. All rights reserved.</p>
+            <div class="flex gap-4 lg:gap-6">
+              <a href="#" class="hover:text-secondary transition-colors"
+                >Privacy Policy</a
+              >
+              <a href="#" class="hover:text-secondary transition-colors"
+                >Terms of Service</a
+              >
+              <a href="#" class="hover:text-secondary transition-colors"
+                >Cookie Policy</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <div id="signInModal" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+      <div
+        class="relative z-10 max-w-md w-full mx-4 lg:mx-auto mt-10 lg:mt-20 glass p-6 lg:p-8 rounded-2xl border border-white/10"
+      >
+        <div class="flex justify-between items-center mb-4 lg:mb-6">
+          <h3 class="text-xl lg:text-2xl font-bold gradient-text">Sign In</h3>
+          <button class="text-gray-400 hover:text-white" id="closeSignInModal">
+            <i class="ri-close-line text-2xl"></i>
+          </button>
+        </div>
+        <form id="signInForm">
+          <div class="mb-3 lg:mb-4">
+            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
+              >Email</label
+            >
+            <input
+              type="email"
+              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+          <div class="mb-4 lg:mb-6">
+            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
+              >Password</label
+            >
+            <input
+              type="password"
+              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-primary py-2 lg:py-3 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap glow text-sm lg:text-base"
+          >
+            Sign In
+          </button>
+          <div
+            class="mt-3 lg:mt-4 text-center text-gray-400 text-sm lg:text-base"
+          >
+            <a href="#" class="hover:text-secondary">Forgot password?</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div id="getStartedModal" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+      <div
+        class="relative z-10 max-w-md w-full mx-4 lg:mx-auto mt-10 lg:mt-20 glass p-6 lg:p-8 rounded-2xl border border-white/10"
+      >
+        <div class="flex justify-between items-center mb-4 lg:mb-6">
+          <h3 class="text-xl lg:text-2xl font-bold gradient-text">
+            Get Started
+          </h3>
+          <button
+            class="text-gray-400 hover:text-white"
+            id="closeGetStartedModal"
+          >
+            <i class="ri-close-line text-2xl"></i>
+          </button>
+        </div>
+        <form id="getStartedForm">
+          <div class="mb-3 lg:mb-4">
+            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
+              >Full Name</label
+            >
+            <input
+              type="text"
+              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
+              placeholder="John Doe"
+              required
+            />
+          </div>
+          <div class="mb-3 lg:mb-4">
+            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
+              >Email</label
+            >
+            <input
+              type="email"
+              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+          <div class="mb-3 lg:mb-4">
+            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
+              >Company</label
+            >
+            <input
+              type="text"
+              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
+              placeholder="Your Company"
+              required
+            />
+          </div>
+          <div class="mb-4 lg:mb-6">
+            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
+              >What are you interested in?</label
+            >
+            <select
+              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary pr-8 text-sm lg:text-base"
+            >
+              <option value="">Select an option</option>
+              <option value="ai">AI Solutions</option>
+              <option value="mobile">Mobile Applications</option>
+              <option value="cloud">Cloud Services</option>
+              <option value="data">Data Analytics</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-primary py-2 lg:py-3 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap glow text-sm lg:text-base"
+          >
+            Contact Us
+          </button>
+        </form>
+      </div>
+    </div>
+    <script>
+      // Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuIcon = document.getElementById('menuIcon');
+
+      function toggleMobileMenu() {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        mobileMenu.classList.toggle('hidden', !isHidden);
+        mobileMenu.classList.toggle('flex', isHidden);
+
+        // Toggle menu icon
+        if (isHidden) {
+          menuIcon.classList.replace('ri-menu-line', 'ri-close-line');
+        } else {
+          menuIcon.classList.replace('ri-close-line', 'ri-menu-line');
+        }
+
+        // Toggle body overflow
+        document.body.style.overflow = isHidden ? 'hidden' : '';
+      }
+
+      mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+      // Close mobile menu when clicking on links
+      document.querySelectorAll('#mobileMenu a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('flex');
+          menuIcon.classList.replace('ri-close-line', 'ri-menu-line');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // Modal Management System
+      class Modal {
+        constructor(modalId, openButtons, closeButton) {
+          this.modal = document.getElementById(modalId);
+          this.openButtons = Array.isArray(openButtons) ? openButtons : [openButtons];
+          this.closeButton = closeButton;
+
+          this.init();
+        }
+
+        init() {
+          // Open modal events
+          this.openButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              this.open();
+            });
+          });
+
+          // Close modal events
+          if (this.closeButton) {
+            this.closeButton.addEventListener('click', (e) => {
+              e.preventDefault();
+              this.close();
+            });
+          }
+
+          // Close when clicking outside
+          this.modal.addEventListener('click', (e) => {
+            if (e.target === this.modal) {
+              this.close();
+            }
+          });
+        }
+
+        open() {
+          // Close mobile menu if open
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('flex');
+          menuIcon.classList.replace('ri-close-line', 'ri-menu-line');
+
+          this.modal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+
+        close() {
+          this.modal.classList.add('hidden');
+          document.body.style.overflow = '';
+        }
+      }
+
+      // Initialize modals
+      const signInModal = new Modal(
+        'signInModal',
+        [
+          document.getElementById('signInBtn'),
+          document.getElementById('mobileSignInBtn')
+        ],
+        document.getElementById('closeSignInModal')
+      );
+
+      const getStartedModal = new Modal(
+        'getStartedModal',
+        [
+          document.getElementById('getStartedBtn'),
+          document.getElementById('mobileGetStartedBtn')
+        ],
+        document.getElementById('closeGetStartedModal')
+      );
+
+      // Form Submissions
+      function handleFormSubmission(form, successMessage, resetForm = true) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const submitBtn = form.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Processing...';
+          submitBtn.disabled = true;
+
+          // Simulate form submission
+          setTimeout(() => {
+            const messageElement = document.createElement('div');
+            messageElement.className = 'mt-4 p-3 bg-secondary/20 text-secondary rounded-button text-center';
+            messageElement.textContent = successMessage;
+            form.appendChild(messageElement);
+
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+
+            if (resetForm) form.reset();
+
+            setTimeout(() => {
+              if (form.contains(messageElement)) {
+                form.removeChild(messageElement);
+              }
+            }, 3000);
+          }, 1500);
+        });
+      }
+
+      // Initialize form handlers
+      if (document.getElementById('signInForm')) {
+        handleFormSubmission(
+          document.getElementById('signInForm'),
+          'Sign in successful! Redirecting...',
+          false
+        );
+      }
+
+      if (document.getElementById('getStartedForm')) {
+        handleFormSubmission(
+          document.getElementById('getStartedForm'),
+          'Thank you! We\'ll contact you soon.'
+        );
+      }
+
+      if (document.getElementById('contactForm')) {
+        handleFormSubmission(
+          document.getElementById('contactForm'),
+          'Message sent successfully! We\'ll get back to you soon.'
+        );
+      }
+
+      // Smooth Scrolling
+      document.querySelectorAll('.nav-link, a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.classList.contains('nav-link')
+            ? this.getAttribute('data-target')
+            : this.getAttribute('href').substring(1);
+
+          if (targetId === 'home') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+          }
+
+          const targetSection = document.getElementById(targetId);
+          if (targetSection) {
+            window.scrollTo({
+              top: targetSection.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+      // Active Navigation State
+      window.addEventListener('scroll', () => {
+        const sections = ['about', 'services', 'blog', 'contact'];
+        let current = window.scrollY < 100 ? 'home' : '';
+
+        if (!current) {
+          sections.forEach(section => {
+            const element = document.getElementById(section);
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              if (rect.top <= 100 && rect.bottom >= 100) {
+                current = section;
+              }
+            }
+          });
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.toggle(
+            'text-secondary',
+            link.getAttribute('data-target') === current
+          );
+        });
+      });.
+    </script>
+  </body>
+</html>
