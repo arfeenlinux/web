@@ -1,1170 +1,1864 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>A-Zentrix</title>
-    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Space+Grotesk:wght@300;400;500;600;700&family=Alternate+Gothic+FS:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
-      rel="stylesheet"
-    />
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: "#8A2BE2",
-              secondary: "#00FFFF",
-            },
-            borderRadius: {
-              none: "0px",
-              sm: "4px",
-              DEFAULT: "8px",
-              md: "12px",
-              lg: "16px",
-              xl: "20px",
-              "2xl": "24px",
-              "3xl": "32px",
-              full: "9999px",
-              button: "8px",
-            },
-          },
-        },
-      };
-    </script>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Zentrix - AI Assistant</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/fWX6GcN6/3-removebg-preview.png">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      :where([class^="ri-"])::before {
-        content: "\f3c2";
-      }
-      body {
-        font-family: "Space Grotesk", sans-serif;
-        background-image: url("https://public.readdy.ai/ai/img_res/d280431e8dffca38c7beef0212085d59.jpg");
-        background-size: cover;
-        background-position: center;
-        color: white;
-        background-attachment: fixed;
-        position: relative;
-      }
-      body::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-          135deg,
-          rgba(10, 10, 20, 0.92) 0%,
-          rgba(15, 15, 35, 0.92) 100%
-        );
-        z-index: -1;
-      }
-      .glass {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-      }
-      .gradient-text {
-        background: linear-gradient(90deg, #8a2be2, #00ffff);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-      .logo-gradient {
-        background: linear-gradient(90deg, #ff69b4, #00bfff);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-      .glow {
-        box-shadow: 0 0 25px rgba(138, 43, 226, 0.35);
-      }
-      .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-      }
-
-      /* Mobile Menu */
-      .mobile-menu {
-        display: none;
-      }
-      .mobile-menu-btn {
-        display: none;
-      }
-
-      /* Responsive Styles */
-      @media (max-width: 1024px) {
-        .nav-links,
-        .nav-buttons {
-          display: none;
+        /* Define a base glow color variable for consistency */
+        
+         :root {
+            --color-emerald-500-rgb: 16, 185, 129;
         }
-        .mobile-menu-btn {
-          display: block;
+        /* Original fadeInUp animation */
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        #about .grid {
-          grid-template-columns: 1fr;
+        /* New slide-in animations */
+        
+        @keyframes fadeInSlideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-        #services .grid,
-        #blog .grid {
-          grid-template-columns: repeat(2, 1fr);
+        
+        @keyframes fadeInSlideRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-        #about .grid,
-        #contact .grid {
-          grid-template-columns: 1fr;
+        
+        #loader {
+            animation: spin 1.5s linear infinite;
         }
-        footer .grid {
-          grid-template-columns: repeat(2, 1fr);
+        /* Base state for scroll-reveal elements */
+        
+        .scroll-reveal {
+            opacity: 0;
+            /* Ensure smooth transition for all properties, including initial transform */
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            /* Set initial transform for elements that will slide, so they start off-screen */
+            /* This will be overridden by the specific animation keyframes */
+            transform: translateY(0);
+            /* Default for fadeInUp, will be changed by slide animations */
         }
-      }
-
-      @media (max-width: 768px) {
-        #services .grid,
-        #blog .grid,
-        footer .grid {
-          grid-template-columns: 1fr;
+        /* Apply specific animations based on JS-added classes */
+        
+        .scroll-reveal.visible {
+            /* For elements without data-animation-type (default fadeInUp) */
+            opacity: 1;
+            transform: translateY(0);
+            /* Ensure default position */
+            animation: fadeInUp 0.8s ease forwards;
         }
-        .nav {
-          padding: 1rem;
+        
+        .scroll-reveal.slide-left-visible {
+            opacity: 1;
+            transform: translateX(0);
+            /* Ensure default position */
+            animation: fadeInSlideLeft 0.8s ease forwards;
         }
-        section {
-          padding: 4rem 1rem;
+        
+        .scroll-reveal.slide-right-visible {
+            opacity: 1;
+            transform: translateX(0);
+            /* Ensure default position */
+            animation: fadeInSlideRight 0.8s ease forwards;
         }
-        .glass {
-          padding: 1.5rem;
+        /* --- Custom Dark Theme with Animated Background --- */
+        
+        .dark-theme-bg {
+            background-color: black;
+            /* Pure black background as requested */
+            position: relative;
         }
-        .feature-card {
-          padding: 1.5rem;
+        
+        .dark-theme-text {
+            color: #e0e0e0;
         }
-      }
-
-      @media (max-width: 640px) {
-        h1 {
-          font-size: 1.75rem;
+        
+        body:not(.bg-white) .text-white {
+            color: #ffffff;
         }
-        h2 {
-          font-size: 2rem;
+        /* Ensure proper scrolling */
+        
+        html,
+        body {
+            overflow-x: hidden;
+            overflow-y: auto;
         }
-        #about h2 {
-          font-size: 2.5rem;
+        /* Animated Background Color Clouds - Bluish-green tones */
+        
+        body.dark-theme-bg::before,
+        body.dark-theme-bg::after {
+            content: '';
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            width: 250vmax;
+            /* Extremely large */
+            height: 250vmax;
+            border-radius: 50%;
+            z-index: -2;
+            /* Deepest layer for color clouds */
+            opacity: 1;
+            /* Gradient alpha controls visibility */
+            will-change: transform;
+            mix-blend-mode: screen;
+            /* Helps colors blend and appear brighter on dark bg */
         }
-        .mobile-menu.active {
-          display: flex;
+        
+        body.dark-theme-bg::before {
+            background: radial-gradient( circle, rgba(0, 170, 170, 0.07) 0%, /* Bluish-Green cloud 1 */
+            rgba(0, 140, 140, 0.04) 25%, rgba(0, 110, 110, 0) 50%);
+            transform-origin: 30% 70%;
+            animation: slowCloudDrift1 120s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite alternate;
         }
-      }
+        
+        body.dark-theme-bg::after {
+            background: radial-gradient( circle, rgba(50, 200, 150, 0.06) 0%, /* Bluish-Green cloud 2 */
+            rgba(40, 170, 120, 0.03) 25%, rgba(30, 140, 90, 0) 50%);
+            transform-origin: 70% 30%;
+            animation: slowCloudDrift2 150s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite alternate-reverse;
+            animation-delay: -60s;
+        }
+        
+        @keyframes slowCloudDrift1 {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg) scale(1);
+            }
+            100% {
+                transform: translate(-40%, -60%) rotate(15deg) scale(1.4);
+            }
+        }
+        
+        @keyframes slowCloudDrift2 {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg) scale(1);
+            }
+            100% {
+                transform: translate(-60%, -40%) rotate(-20deg) scale(1.5);
+            }
+        }
+        /* --- Cursor Glow Effect (Brighter, More Ambient, Bluish-Green) --- */
+        
+        #cursor-glow {
+            position: fixed;
+            width: 90vmax;
+            /* Very large, covers a good portion of the viewport */
+            height: 90vmax;
+            border-radius: 50%;
+            /* Brighter core, very soft and wide bluish-green falloff - INCREASED INTENSITY */
+            background: radial-gradient( circle, rgba(0, 255, 220, 0.3) 0%, /* INCREASED: Brighter, more intense bluish-green core */
+            rgba(0, 200, 170, 0.15) 15%, /* INCREASED: Quick transition to softer bluish-green */
+            rgba(0, 150, 130, 0.08) 40%, /* INCREASED: Very faint bluish-green spread */
+            rgba(0, 100, 80, 0) 60%/* Fade to transparent, wide falloff */
+            );
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            /* Above background clouds, but behind most content */
+            transition: opacity 0.3s ease-out;
+            opacity: 0;
+            /* Start hidden */
+            mix-blend-mode: add;
+            /* Or screen, experiment for best look with the bg clouds */
+        }
+        /* white theme Enhanced */
+        
+        body.bg-white {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        
+        body.bg-white::before,
+        body.bg-white::after {
+            display: none;
+        }
+        /* Hide animated clouds in light mode */
+        /* Cursor glow for light theme - INCREASED INTENSITY */
+        
+        body.bg-white #cursor-glow {
+            display: block;
+            /* Ensure it's visible */
+            background: radial-gradient( circle, rgba(var(--color-emerald-500-rgb), 0.25) 0%, /* INCREASED: More intense emerald core */
+            rgba(var(--color-emerald-500-rgb), 0.12) 15%, /* INCREASED: Softer spread */
+            rgba(var(--color-emerald-500-rgb), 0.06) 40%, /* INCREASED: Fainter spread */
+            rgba(var(--color-emerald-500-rgb), 0) 60%/* Fade to transparent */
+            );
+            mix-blend-mode: normal;
+            /* Use normal blend mode for light background */
+        }
+        
+        body.bg-white .text-emerald-400,
+        body.bg-white .text-emerald-500 {
+            color: #059669;
+        }
+        
+        body.bg-white a.text-emerald-400:hover,
+        body.bg-white a.text-emerald-500:hover {
+            color: #047857;
+        }
+        
+        body.bg-white .text-zinc-400 {
+            color: #4b5563;
+        }
+        
+        body.bg-white .text-zinc-500 {
+            color: #6b7280;
+        }
+        
+        body.bg-white .text-zinc-901 {
+            color: #374151;
+        }
+        
+        body.bg-white .bg-zinc-900 {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+        }
+        /* Adjusted hover shadow for glowing cards in light theme */
+        
+        body.bg-white .glowing-card:hover {
+            box-shadow: 0 10px 25px rgba(var(--color-emerald-500-rgb), 0.2), /* Lighter glow for light theme */
+            0 0 40px rgba(var(--color-emerald-500-rgb), 0.1), 0 0 15px rgba(var(--color-emerald-500-rgb), 0.3);
+        }
+        
+        body.bg-white .hover\:shadow-emerald-500\/40:hover {
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.07), 0 4px 6px -4px rgba(16, 185, 129, 0.07), 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+        
+        body.bg-white .bg-zinc-901 {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        
+        body.bg-white footer.bg-zinc-900 {
+            background-color: #f3f4f6;
+        }
+        
+        body.bg-white nav {
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
+        }
+        
+        body.bg-white nav .text-sm {
+            color: #374151;
+        }
+        
+        body.bg-white nav .text-sm a:hover {
+            color: #059669;
+        }
+        /* Text glow for navigation links on hover in light theme */
+        
+        body.bg-white nav a.hover\:text-emerald-400:hover {
+            text-shadow: 0 0 5px rgba(var(--color-emerald-500-rgb), 0.4);
+            /* Softer glow for light theme */
+        }
+        
+        body.bg-white nav button#mobileMenuButton.text-white {
+            color: #374151;
+        }
+        
+        body.bg-white #mobileMenu.bg-zinc-900 {
+            background-color: #ffffff;
+            border-top-color: #e5e7eb;
+        }
+        
+        body.bg-white #mobileMenu a {
+            color: #374151;
+        }
+        
+        body.bg-white #mobileMenu a:hover {
+            color: #059669;
+            background-color: #f3f4f6;
+        }
+        
+        body.bg-white .border-zinc-800 {
+            border-color: #e5e7eb;
+        }
+        
+        body.bg-white .border-zinc-700 {
+            border-color: #d1d5db;
+        }
+        
+        body.bg-white .shadow-md {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        body.bg-white .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+        }
+        
+        body.bg-white .shadow-xl {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+        }
+        
+        body.bg-white .bg-gradient-to-r.from-black.via-zinc-900.to-black {
+            background-image: linear-gradient(to right, #e0f7fa, #f7fafc, #ffffff);
+        }
+        
+        body.bg-white .bg-gradient-to-r.from-zinc-900.to-black {
+            background-image: linear-gradient(to right, #f3f4f6, #e9ecef);
+        }
+        
+        body.bg-white .from-emerald-500\/10 {
+            --tw-gradient-from: rgba(16, 185, 129, 0.06) var(--tw-gradient-from-position) !important;
+            --tw-gradient-to: rgba(16, 185, 129, 0) var(--tw-gradient-to-position) !important;
+        }
+        
+        body.bg-white .to-zinc-900 {
+            --tw-gradient-to: #f9fafb var(--tw-gradient-to-position) !important;
+        }
+        
+        body.bg-white .via-zinc-900 {
+            --tw-gradient-stops: var(--tw-gradient-from), #f3f4f6 var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+        }
+        
+        body.bg-white .bg-zinc-900\/50 {
+            background-color: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid #e5e7eb;
+        }
+        
+        body.bg-white input[type="email"] {
+            background-color: #ffffff;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+        }
+        
+        body.bg-white input[type="email"]::placeholder {
+            color: #9ca3af;
+        }
+        
+        body.bg-white input[type="email"]:focus {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+        
+        body.bg-white .learn-more-btn {
+            background-color: #f0fdfa;
+            color: #0f766e;
+            border: 1px solid #ccfbf1;
+            font-weight: 500;
+        }
+        
+        body.bg-white .learn-more-btn:hover {
+            background-color: #ccfbf1;
+            border-color: #99f6e4;
+            color: #115e59;
+        }
+        
+        body.bg-white #floatingCta {
+            background-color: #ffffff;
+            color: #059669;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        body.bg-white #floatingCta:hover {
+            color: #FFFFFF;
+            border-color: transparent;
+        }
+        
+        body.bg-white #themeToggle {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        body.bg-white details.group.bg-zinc-900 {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+        
+        body.bg-white details.group.hover\:bg-zinc-800:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+        
+        body.bg-white details.group summary {
+            color: #111827;
+            font-weight: 500;
+        }
+        
+        body.bg-white details.group summary:after {
+            color: #059669;
+        }
+        
+        body.bg-white details.group p.text-zinc-400 {
+            color: #4b5563;
+        }
+        
+        body.bg-white .text-white {
+            color: #111827;
+        }
+        
+        body.bg-white footer .text-zinc-400 {
+            color: #4b5563;
+        }
+        
+        body.bg-white footer .text-zinc-400:hover {
+            color: #059669;
+        }
+        
+        body.bg-white footer h4.text-white {
+            color: #111827;
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        /* Enhanced general button/link hover glow */
+        
+        button,
+        a.transition {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+        
+        button:hover,
+        a.transition:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(var(--color-emerald-500-rgb), 0.8), /* Stronger, more spread out glow */
+            0 0 30px rgba(var(--color-emerald-500-rgb), 0.4);
+        }
+        
+        button:active,
+        a.transition:active {
+            transform: scale(0.95);
+        }
+        /* Base style for glowing cards/sections */
+        
+        .glowing-card {
+            box-shadow: 0 4px 15px rgba(var(--color-emerald-500-rgb), 0.05), /* Subtle base glow */
+            0 0 5px rgba(var(--color-emerald-500-rgb), 0.02);
+            /* Even more subtle */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Ensure smooth transition for glow */
+        }
+        /* Hover effect for glowing cards, combining with existing Tailwind */
+        
+        .glowing-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            /* Keep existing translate and scale */
+            box-shadow: 0 10px 25px rgba(var(--color-emerald-500-rgb), 0.4), /* Stronger glow on hover */
+            0 0 40px rgba(var(--color-emerald-500-rgb), 0.2), 0 0 15px rgba(var(--color-emerald-500-rgb), 0.6);
+            /* More intense core */
+        }
+        /* Text glow for navigation links on hover */
+        
+        nav a.hover\:text-emerald-400:hover {
+            text-shadow: 0 0 8px rgba(var(--color-emerald-500-rgb), 0.7);
+        }
+        
+        .carousel-container {
+            width: 1100px;
+            overflow: hidden;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 10px;
+        }
+        
+        .carousel-track {
+            display: flex;
+            width: calc(2 * 1100px);
+            animation: slide 20s linear infinite;
+        }
+        
+        .carousel-container:hover .carousel-track,
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+        
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 180px;
+            margin-right: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+        
+        .carousel-item:hover {
+            transform: scale(1.1);
+        }
+        
+        .carousel-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        @keyframes slide {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        details[open] summary~* {
+            animation: sweep .3s ease-in-out;
+        }
+        
+        @keyframes sweep {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        summary {
+            list-style: none;
+        }
+        
+        summary::-webkit-details-marker {
+            display: none;
+        }
+        
+        summary:after {
+            content: "+";
+            float: right;
+            transition: transform 0.3s;
+        }
+        
+        details[open] summary:after {
+            transform: rotate(45deg);
+        }
+        
+        #loading {
+            transition: opacity 0.5s ease-out;
+        }
+        
+        #chatbotContainer {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        #chatbotContainer.hidden {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            pointer-events: none;
+        }
+        
+        .chatbot-message {
+            padding: 8px 12px;
+            border-radius: 18px;
+            max-width: 85%;
+            word-wrap: break-word;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            animation: fadeInSlideUp 0.4s ease-out forwards;
+        }
+        
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .user-message {
+            background-color: #059669;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 6px;
+        }
+        
+        .bot-message {
+            background-color: #374151;
+            color: #f9fafb;
+            align-self: flex-start;
+            border-bottom-left-radius: 6px;
+        }
+        
+        body.bg-white .bot-message {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+        
+        .message-timestamp {
+            font-size: 0.7rem;
+            display: block;
+            margin-top: 5px;
+            opacity: 0.6;
+            clear: both;
+        }
+        
+        .user-message .message-timestamp {
+            text-align: right;
+            color: #d1fae5;
+        }
+        
+        body.bg-white .user-message .message-timestamp {
+            color: #065f46;
+        }
+        
+        .bot-message .message-timestamp {
+            text-align: left;
+            color: #9ca3af;
+        }
+        
+        body.bg-white .bot-message .message-timestamp {
+            color: #6b7280;
+        }
+        
+        #typingIndicator {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: #d1d5db;
+        }
+        
+        body.bg-white #typingIndicator {
+            color: #4b5563;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #9ca3af;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.2s infinite ease-in-out;
+        }
+        
+        body.bg-white .typing-dot {
+            background-color: #6b7280;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes typing {
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: translateY(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-4px);
+            }
+        }
+        
+        body.bg-white #chatbotInput {
+            background-color: #ffffff;
+            color: #1f2937;
+            border-color: #d1d5db;
+        }
+        
+        body.bg-white #chatbotInput::placeholder {
+            color: #9ca3af;
+        }
+        
+        body.bg-white #chatbotInput:focus {
+            border-color: #059669;
+            box-shadow: 0 0 0 1px #059669;
+        }
+        
+        body.bg-white #chatbotContainer {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+        
+        body.bg-white #chatbotInputArea {
+            border-top-color: #e5e7eb;
+        }
+        
+        #chatbotMessages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #chatbotMessages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        #chatbotMessages::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 3px;
+        }
+        
+        body.bg-white #chatbotMessages::-webkit-scrollbar-thumb {
+            background-color: #d1d5db;
+        }
+        /* New styles for hidden content sections */
+        
+        .content-page-section {
+            display: none;
+            /* Hidden by default */
+            /* These classes are replicated from the original separate HTML files */
+            min-height: calc(100vh - 4.5rem);
+            /* Account for fixed nav height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            padding-top: 5rem;
+            /* Adjust for fixed header */
+        }
+        
+        .content-page-section.active {
+            display: flex;
+            /* Show active section */
+        }
+        
+        #home-content-sections {
+            display: block;
+            /* Shown by default */
+        }
     </style>
-  </head>
-  <body>
-    <nav
-      class="glass fixed w-full z-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-white/5"
-    >
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <div class="flex items-center">
-          <h1
-            class="text-2xl sm:text-3xl font-bold logo-gradient tracking-wider"
-            style="font-family: 'Alternate Gothic FS', sans-serif"
-          >
-            A-ZENTRIX
-          </h1>
-        </div>
+</head>
 
-        <!-- Desktop Navigation -->
-        <div class="hidden lg:flex gap-8 nav-links">
-          <a
-            href="#"
-            class="hover:text-secondary transition-colors relative group nav-link"
-            data-target="home"
-          >
-            Home
-            <span
-              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
-            ></span>
-          </a>
-          <a
-            href="#about"
-            class="hover:text-secondary transition-colors relative group nav-link"
-            data-target="about"
-          >
-            About
-            <span
-              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
-            ></span>
-          </a>
-          <a
-            href="#services"
-            class="hover:text-secondary transition-colors relative group nav-link"
-            data-target="services"
-          >
-            Services
-            <span
-              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
-            ></span>
-          </a>
-          <a
-            href="#blog"
-            class="hover:text-secondary transition-colors relative group nav-link"
-            data-target="blog"
-          >
-            Blog
-            <span
-              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
-            ></span>
-          </a>
-          <a
-            href="#contact"
-            class="hover:text-secondary transition-colors relative group nav-link"
-            data-target="contact"
-          >
-            Contact
-            <span
-              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full"
-            ></span>
-          </a>
-        </div>
+<body class="bg-black text-white font-sans transition-colors duration-300 dark-theme-bg dark-theme-text">
 
-        <!-- Desktop Buttons -->
-        <div class="hidden lg:flex items-center gap-4 nav-buttons">
-          <a
-            href="#"
-            class="text-gray-300 hover:text-secondary transition-colors"
-            id="signInBtn"
-            >Sign In</a
-          >
-          <button
-            class="bg-primary px-4 sm:px-6 py-1 sm:py-2 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap glow"
-            id="getStartedBtn"
-          >
-            Get Started
-          </button>
+    <div id="loading" class="fixed inset-0 bg-black z-50 flex items-center justify-center">
+        <div id="loader" class="border-4 border-emerald-500 border-t-transparent rounded-full w-16 h-16"></div>
+    </div>
+    <button id="backToTop" aria-label="Back to top" class="fixed bottom-5 right-5 z-[60] bg-emerald-500 text-white p-3 rounded-full shadow-lg hover:scale-105 transition transform-gpu">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+  </svg>
+</button>
+    <button id="floatingCta" aria-label="Open A-Zentrix Assistant" class="fixed bottom-5 left-5 z-[60] bg-white text-black px-4 py-2 rounded-xl font-semibold hover:bg-emerald-500 hover:text-white transition flex items-center gap-2 shadow-lg">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd" />
+  </svg>
+  A-Zentrix Assistant
+</button>
+    <div id="chatbotContainer" class="fixed bottom-[calc(2.5rem+1rem+0.5rem)] left-5 z-[50] w-80 sm:w-96 max-h-[calc(100vh-10rem)] sm:max-h-[500px] bg-zinc-800 rounded-lg shadow-xl hidden flex-col overflow-hidden">
+        <div id="chatbotHeader" class="p-3 bg-emerald-500 text-white rounded-t-lg flex justify-between items-center cursor-grab">
+            <span class="font-semibold">A-Zentrix Assistant</span>
+            <button id="closeChatbot" aria-label="Close chat" class="text-white hover:text-emerald-100 text-2xl leading-none">×</button>
         </div>
-
-        <!-- Mobile Menu Button -->
-        <button class="lg:hidden text-white p-2" id="mobileMenuBtn">
-          <i class="ri-menu-line text-2xl" id="menuIcon"></i>
+        <div id="chatbotMessages" role="log" aria-live="polite" class="flex-grow p-4 overflow-y-auto space-y-3">
+            <div id="typingIndicator" class="hidden">
+                <span>A-Zentrix is typing</span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+            </div>
+        </div>
+        <div id="chatbotInputArea" class="p-3 border-t border-zinc-700 flex items-center">
+            <input type="text" id="chatbotInput" aria-label="Message A-Zentrix Assistant" placeholder="Ask something..." class="flex-grow p-2 border border-zinc-600 bg-zinc-700 text-white rounded-l-md focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-shadow">
+            <button id="chatbotSendButton" aria-label="Send message" class="bg-emerald-500 text-white px-4 py-2 rounded-r-md hover:bg-emerald-600 transition h-full">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 16.571V11.691l4.707-4.707a1 1 0 00-1.414-1.414L10 7.999V3.429l.894-.576z" />
+            </svg>
         </button>
-      </div>
-
-      <!-- Mobile Menu -->
-      <div
-        class="lg:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-lg py-4 px-6 hidden flex-col gap-4 border-t border-white/5 transition-all duration-300"
-        id="mobileMenu"
-      >
-        <a
-          href="#"
-          class="hover:text-secondary transition-colors py-2 nav-link"
-          data-target="home"
-          >Home</a
-        >
-        <a
-          href="#about"
-          class="hover:text-secondary transition-colors py-2 nav-link"
-          data-target="about"
-          >About</a
-        >
-        <a
-          href="#services"
-          class="hover:text-secondary transition-colors py-2 nav-link"
-          data-target="services"
-          >Services</a
-        >
-        <a
-          href="#blog"
-          class="hover:text-secondary transition-colors py-2 nav-link"
-          data-target="blog"
-          >Blog</a
-        >
-        <a
-          href="#contact"
-          class="hover:text-secondary transition-colors py-2 nav-link"
-          data-target="contact"
-          >Contact</a
-        >
-        <div class="flex gap-4 mt-2">
-          <a
-            href="#"
-            class="text-gray-300 hover:text-secondary transition-colors py-2"
-            id="mobileSignInBtn"
-            >Sign In</a
-          >
-          <button
-            class="bg-primary px-4 py-2 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap glow"
-            id="mobileGetStartedBtn"
-          >
-            Get Started
-          </button>
         </div>
-      </div>
+    </div>
+    <button id="themeToggle" aria-label="Toggle theme" class="fixed top-5 right-5 bg-zinc-800 p-2 rounded-full shadow-lg z-[60] text-white hover:bg-emerald-500 transition">
+  <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+</button>
+    <nav class="fixed top-0 left-0 w-full bg-black bg-opacity-90 z-30 border-b border-zinc-800 shadow-md backdrop-blur-sm scroll-reveal">
+        <div class="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
+            <a href="#home" class="text-xl font-bold text-emerald-400 flex items-center gap-2 transition nav-link" data-target="home-content-sections">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg> A-Zentrix
+            </a>
+            <div class="space-x-6 text-sm hidden md:flex">
+                <a href="#solutions" class="hover:text-emerald-400 transition nav-link" data-target="home-content-sections">Solutions</a>
+                <a href="#our-journey-section" class="hover:text-emerald-400 transition nav-link" data-target="our-journey-section">Our Journey</a>
+                <a href="#faq" class="hover:text-emerald-400 transition nav-link" data-target="home-content-sections">FAQ</a>
+                <a href="#newsletter" class="hover:text-emerald-400 transition nav-link" data-target="home-content-sections">Newsletter</a>
+            </div>
+            <button id="mobileMenuButton" class="md:hidden text-white" aria-expanded="false" aria-controls="mobileMenu">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden bg-zinc-900 w-full px-4 py-2 border-t border-zinc-800">
+            <div class="flex flex-col space-y-3">
+                <a href="#solutions" class="hover:text-emerald-400 transition py-2 nav-link" data-target="home-content-sections">Solutions</a>
+                <a href="#our-journey-section" class="hover:text-emerald-400 transition py-2 nav-link" data-target="our-journey-section">Our Journey</a>
+                <a href="#faq" class="hover:text-emerald-400 transition py-2 nav-link" data-target="home-content-sections">FAQ</a>
+                <a href="#newsletter" class="hover:text-emerald-400 transition py-2 nav-link" data-target="home-content-sections">Newsletter</a>
+            </div>
+        </div>
     </nav>
-    <section
-      id="about"
-      class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
-    >
-      <div class="absolute inset-0 z-0">
-        <div
-          class="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 mix-blend-overlay"
-        ></div>
-        <div
-          class="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent"
-        ></div>
-      </div>
-      <div
-        class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10 py-12 lg:py-0"
-      >
-        <div class="flex flex-col justify-center order-2 lg:order-1">
-          <h2
-            class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 gradient-text"
-          >
-            A-Zentrix
-          </h2>
-          <p class="text-lg sm:text-xl text-gray-300 mb-8">
-            A-Zentrix delivers cutting-edge AI solutions that revolutionize the way businesses operate. Our innovative technology empowers you to achieve more with less effort, enhancing efficiency, automation, and growth.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a
-              href="#services"
-              class="bg-primary px-8 py-3 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap text-lg glow inline-block text-center"
-              >Explore Our Services</a
-            >
-            <a
-              href="#contact"
-              class="glass px-8 py-3 !rounded-button hover:bg-white/20 transition-colors whitespace-nowrap text-lg inline-block text-center"
-              >Contact Us</a
-            >
-          </div>
-        </div>
-        <div class="relative order-1 lg:order-2">
-          <div
-            class="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-xl opacity-70"
-          ></div>
-          <div
-            class="w-full h-full rounded-2xl glow relative z-10 glass overflow-hidden"
-          >
-            <img
-              src="https://public.readdy.ai/ai/img_res/278be215d29892e43f07b5af7446fe03.jpg"
-              alt="AI Visualization"
-              class="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-    <section id="services" class="py-16 lg:py-24 relative">
-      <div
-        class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent"
-      ></div>
-      <div
-        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/40762e632a3ea1fe69238fcfcc06f1b7.jpg')] bg-cover bg-center opacity-15"
-      ></div>
-      <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <h2
-          class="text-3xl lg:text-4xl font-bold text-center mb-12 lg:mb-16 gradient-text"
-        >
-          Our Services
-        </h2>
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-        >
-          <div
-            class="feature-card glass p-6 lg:p-8 rounded-2xl transition-all duration-300 border border-white/5"
-          >
-            <div
-              class="w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-gradient-to-br from-primary/30 to-secondary/20 rounded-xl mb-4 lg:mb-6"
-            >
-              <i class="ri-brain-line text-2xl lg:text-3xl text-secondary"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 lg:mb-4">AI & Machine Learning Solutions</h3>
-            <p class="text-gray-400 text-sm lg:text-base">
-              We develop cutting-edge AI models that enhance automation, decision-making, and efficiency, helping businesses leverage the power of intelligent technology.
-            </p>
-          </div>
-          <div
-            class="feature-card glass p-6 lg:p-8 rounded-2xl transition-all duration-300 border border-white/5"
-          >
-            <div
-              class="w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-gradient-to-br from-primary/30 to-secondary/20 rounded-xl mb-4 lg:mb-6"
-            >
-              <i
-                class="ri-smartphone-line text-2xl lg:text-3xl text-secondary"
-              ></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 lg:mb-4">Custom Software Development</h3>
-            <p class="text-gray-400 text-sm lg:text-base">
-              From web apps to enterprise solutions, we build high-performance, scalable software tailored to your business needs.
-            </p>
-          </div>
-          <div
-            class="feature-card glass p-6 lg:p-8 rounded-2xl transition-all duration-300 border border-white/5"
-          >
-            <div
-              class="w-14 h-14 lg:w-16 lg:h-16 flex items-center justify-center bg-gradient-to-br from-primary/30 to-secondary/20 rounded-xl mb-4 lg:mb-6"
-            >
-              <i class="ri-cloud-line text-2xl lg:text-3xl text-secondary"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 lg:mb-4">AI-Powered Automation</h3>
-            <p class="text-gray-400 text-sm lg:text-base">
-              Boost productivity by automating repetitive tasks with AI-driven workflows, reducing manual effort and optimizing operations.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section id="about" class="py-16 lg:py-24 relative">
-      <div
-        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/0266459747ff864a37feece7ce0ad2a3.jpg')] bg-cover bg-center opacity-15"
-      ></div>
-      <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <h2
-          class="text-3xl lg:text-4xl font-bold text-center mb-12 lg:mb-16 gradient-text"
-        >
-          About A-Zentrix
-        </h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          <div
-            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-primary/20 transition-all duration-300"
-          >
-            <h3
-              class="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 gradient-text"
-            >
-              Our Story
-            </h3>
-            <p class="text-gray-300 mb-4 lg:mb-6 text-sm lg:text-base">
-              A-Zentrix was founded with a vision to bridge the gap between businesses and AI-driven innovation. We saw the need for smarter, more efficient solutions and set out to develop cutting-edge AI, automation, and software development services that empower businesses to achieve more with less effort.
-            </p>
-            <p class="text-gray-300 text-sm lg:text-base">
-              Today, we continue to push the boundaries of technology, delivering intelligent solutions that transform operations and drive growth. The future is AI, and we’re here to build it.
-            </p>
-          </div>
-          <div
-            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-primary/20 transition-all duration-300"
-          >
-            <h3
-              class="text-xl lg:text-2xl font-bold mb-4 lg:mb-6 gradient-text"
-            >
-              Our Mission & Vision
-            </h3>
-            <div class="mb-4 lg:mb-6">
-              <h4 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">Mission</h4>
-              <p class="text-gray-300 text-sm lg:text-base">
-                At A-Zentrix, our mission is to empower businesses with AI-driven solutions that enhance efficiency, automation, and growth. We strive to bridge the gap between innovation and real-world applications, making cutting-edge technology accessible, scalable, and impactful.
-              </p>
-            </div>
-            <div>
-              <h4 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">Vision</h4>
-              <p class="text-gray-300 text-sm lg:text-base">
-                We envision a future where AI seamlessly integrates into every industry, transforming the way businesses operate. Our goal is to be a global leader in AI innovation, driving progress through intelligent automation, data-driven decision-making, and next-generation software solutions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section id="blog" class="py-16 lg:py-24 relative">
-      <div
-        class="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/5 to-transparent"
-      ></div>
-      <div
-        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/510bc6d302d28b53759eec40fb5f39d2.jpg')] bg-cover bg-center opacity-15"
-      ></div>
-      <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <h2
-          class="text-3xl lg:text-4xl font-bold text-center mb-12 lg:mb-16 gradient-text"
-        >
-          Latest Blog Posts
-        </h2>
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-        >
-          <div
-            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-secondary/20 transition-all duration-300"
-          >
-            <div class="mb-4 lg:mb-6 overflow-hidden rounded-xl">
-              <img
-                src="https://public.readdy.ai/ai/img_res/e6b4e927a28d4498f4928c056e9708cb.jpg"
-                alt="Technology Trends"
-                class="w-full h-48 object-cover object-center hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div class="mb-3 lg:mb-4">
-              <span
-                class="text-xs text-secondary bg-secondary/10 px-2 lg:px-3 py-1 rounded-full"
-                >Technology</span
-              >
-              <span class="text-xs text-gray-400 ml-2">March 25, 2025</span>
-            </div>
-            <h3 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">
-              The Future of AI in Business Operations
-            </h3>
-            <p class="text-gray-300 mb-3 lg:mb-4 text-sm lg:text-base">
-              Discover how artificial intelligence is transforming business
-              operations and creating new opportunities for growth and
-              innovation.
-            </p>
-            <a
-              href="#"
-              class="text-secondary hover:underline flex items-center text-sm lg:text-base"
-            >
-              Read More <i class="ri-arrow-right-line ml-1"></i>
-            </a>
-          </div>
-          <div
-            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-secondary/20 transition-all duration-300"
-          >
-            <div class="mb-4 lg:mb-6 overflow-hidden rounded-xl">
-              <img
-                src="https://public.readdy.ai/ai/img_res/733bf06c05045b504507cb897befa560.jpg"
-                alt="Mental Wellness"
-                class="w-full h-48 object-cover object-center hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div class="mb-3 lg:mb-4">
-              <span
-                class="text-xs text-secondary bg-secondary/10 px-2 lg:px-3 py-1 rounded-full"
-                >Wellness</span
-              >
-              <span class="text-xs text-gray-400 ml-2">March 18, 2025</span>
-            </div>
-            <h3 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">
-              5 Ways Technology Can Improve Mental Wellness
-            </h3>
-            <p class="text-gray-300 mb-3 lg:mb-4 text-sm lg:text-base">
-              Explore innovative ways that modern technology can support mental
-              health and enhance overall wellbeing in today's fast-paced world.
-            </p>
-            <a
-              href="#"
-              class="text-secondary hover:underline flex items-center text-sm lg:text-base"
-            >
-              Read More <i class="ri-arrow-right-line ml-1"></i>
-            </a>
-          </div>
-          <div
-            class="glass p-6 lg:p-8 rounded-2xl border border-white/5 hover:border-secondary/20 transition-all duration-300"
-          >
-            <div class="mb-4 lg:mb-6 overflow-hidden rounded-xl">
-              <img
-                src="https://public.readdy.ai/ai/img_res/a4e4f627d0be9b21b2179c7f2807fdbf.jpg"
-                alt="App Development"
-                class="w-full h-48 object-cover object-center hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div class="mb-3 lg:mb-4">
-              <span
-                class="text-xs text-secondary bg-secondary/10 px-2 lg:px-3 py-1 rounded-full"
-                >Development</span
-              >
-              <span class="text-xs text-gray-400 ml-2">March 10, 2025</span>
-            </div>
-            <h3 class="text-lg lg:text-xl font-bold mb-2 lg:mb-3">
-              Building Mobile Apps That Users Love
-            </h3>
-            <p class="text-gray-300 mb-3 lg:mb-4 text-sm lg:text-base">
-              Learn the key principles and best practices for creating mobile
-              applications that deliver exceptional user experiences and drive
-              engagement.
-            </p>
-            <a
-              href="#"
-              class="text-secondary hover:underline flex items-center text-sm lg:text-base"
-            >
-              Read More <i class="ri-arrow-right-line ml-1"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section
-      id="contact"
-      class="py-12 md:py-16 lg:py-24 relative overflow-hidden"
-    >
-      <div
-        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/8a6879ba8c85154110cb3efe2f4dabe3.jpg')] bg-cover bg-center opacity-20"
-      ></div>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        <div
-          class="glass p-8 sm:p-10 lg:p-12 rounded-xl lg:rounded-2xl border border-white/5 hover:border-white/10 transition-all duration-300 text-center"
-        >
-          <div
-            class="absolute -inset-px rounded-xl lg:rounded-2xl bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 blur-sm -z-10"
-          ></div>
 
-          <h2
-            class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 gradient-text"
-          >
-            Contact Us
-          </h2>
-
-          <p
-            class="text-gray-300 text-lg sm:text-xl max-w-3xl mx-auto mb-8 sm:mb-10"
-          >
-            Have questions about our services or want to discuss your project?
-            Reach out to us using the information below.
-          </p>
-
-          <div
-            class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-10"
-          >
-            <!-- Address -->
-            <div
-              class="glass p-4 sm:p-5 rounded-lg border border-white/5 hover:border-primary/20 transition-all duration-300"
-            >
-              <div
-                class="w-12 h-12 sm:w-14 sm:h-14 mx-auto flex items-center justify-center bg-primary/20 rounded-full mb-3 sm:mb-4"
-              >
-                <i
-                  class="ri-map-pin-line text-secondary text-xl sm:text-2xl"
-                ></i>
-              </div>
-              <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Address</h3>
-              <p class="text-gray-300 text-sm sm:text-base">
-                123 Innovation Drive<br />Tech City, TC 10101
-              </p>
-            </div>
-
-            <!-- Email -->
-            <div
-              class="glass p-4 sm:p-5 rounded-lg border border-white/5 hover:border-primary/20 transition-all duration-300"
-            >
-              <div
-                class="w-12 h-12 sm:w-14 sm:h-14 mx-auto flex items-center justify-center bg-primary/20 rounded-full mb-3 sm:mb-4"
-              >
-                <i class="ri-mail-line text-secondary text-xl sm:text-2xl"></i>
-              </div>
-              <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Email</h3>
-              <a
-                href="mailto:contact@a-zentrix.com"
-                class="text-gray-300 hover:text-secondary transition-colors text-sm sm:text-base"
-              >
-              azentrix.tech@gmail.com
-
-              </a>
-            </div>
-
-            <!-- Phone -->
-            <div
-              class="glass p-4 sm:p-5 rounded-lg border border-white/5 hover:border-primary/20 transition-all duration-300"
-            >
-              <div
-                class="w-12 h-12 sm:w-14 sm:h-14 mx-auto flex items-center justify-center bg-primary/20 rounded-full mb-3 sm:mb-4"
-              >
-                <i class="ri-phone-line text-secondary text-xl sm:text-2xl"></i>
-              </div>
-              <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3">Phone</h3>
-              <a
-                href="tel:+15551234567"
-                class="text-gray-300 hover:text-secondary transition-colors text-sm sm:text-base"
-              >
-                +1 (555) 123-4567
-              </a>
-            </div>
-          </div>
-
-          <!-- Contact Us Button -->
-          <div class="mb-10 sm:mb-12 text-center">
-            <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfPi0A6CNrXp4N0ZlH_Q-in5qNmQtpNXY3fMe0aC2V8_3mOgQ/viewform?usp=header"
-              target="_blank"
-              class="inline-block bg-secondary text-black px-8 py-3 rounded-button hover:opacity-90 transition-opacity font-medium glow"
-            >
-              Contact Us
-            </a>
-          </div>
-
-          <div class="mt-10 sm:mt-12">
-            <h3 class="text-lg sm:text-xl font-bold mb-4 sm:mb-5">
-              Connect With Us
-            </h3>
-            <div class="flex justify-center gap-4 sm:gap-6">
-              <!-- <a
-                href="#"
-                class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
-              >
-                <i
-                  class="ri-facebook-fill text-xl sm:text-2xl text-gray-300 hover:text-secondary"
-                ></i>
-              </a>
-              <a
-                href="#"
-                class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
-              >
-                <i
-                  class="ri-twitter-fill text-xl sm:text-2xl text-gray-300 hover:text-secondary"
-                ></i>
-              </a> -->
-              <a
-                href="https://www.linkedin.com/company/a-zentrix/ "
-                class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
-              >
-                <i
-                  class="ri-linkedin-fill text-xl sm:text-2xl text-gray-300 hover:text-secondary"
-                ></i>
-              </a>
-              <a
-                href="https://www.instagram.com/a_zentrix_/"
-                class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors"
-              >
-                <i
-                  class="ri-instagram-line text-xl sm:text-2xl text-gray-300 hover:text-secondary"
-                ></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <footer
-      class="py-8 lg:py-12 glass mt-8 lg:mt-12 border-t border-white/5 relative"
-    >
-      <div
-        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/0d82ea4bfbe76751e451c130a5e5b76a.jpg')] bg-cover bg-center opacity-10"
-      ></div>
-      <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-8 lg:mb-12"
-        >
-          <div>
-            <div class="flex items-center mb-4 lg:mb-6">
-              <h1
-                class="text-xl lg:text-2xl font-bold logo-gradient tracking-wider"
-                style="font-family: 'Alternate Gothic FS', sans-serif"
-              >
-                A-ZENTRIX
-              </h1>
-            </div>
-            <p class="text-gray-400 text-sm lg:text-base">
-              Empowering innovation with cutting-edge technology solutions.
-            </p>
-            <div class="mt-4 lg:mt-6">
-              <button
-                class="bg-white/5 hover:bg-white/10 transition-colors px-3 lg:px-4 py-1 lg:py-2 rounded-full text-xs lg:text-sm flex items-center gap-2 border border-white/10"
-              >
-                <i class="ri-mail-line"></i> Subscribe to Newsletter
-              </button>
-            </div>
-          </div>
-          <div>
-            <h4
-              class="font-bold mb-2 lg:mb-4 text-white/90 text-sm lg:text-base"
-            >
-              Services
-            </h4>
-            <ul
-              class="space-y-2 lg:space-y-3 text-gray-400 text-sm lg:text-base"
-            >
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                AI Solutions
-              </li>
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                Mobile Applications
-              </li>
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                Cloud Services
-              </li>
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                Data Analytics
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4
-              class="font-bold mb-2 lg:mb-4 text-white/90 text-sm lg:text-base"
-            >
-              Company
-            </h4>
-            <ul
-              class="space-y-2 lg:space-y-3 text-gray-400 text-sm lg:text-base"
-            >
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                About Us
-              </li>
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                Careers
-              </li>
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                Blog
-              </li>
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                Contact
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4
-              class="font-bold mb-2 lg:mb-4 text-white/90 text-sm lg:text-base"
-            >
-              Support
-            </h4>
-            <ul
-              class="space-y-2 lg:space-y-3 text-gray-400 text-sm lg:text-base"
-            >
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                FAQ
-              </li>
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                Help Center
-              </li>
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                App Support
-              </li>
-              <li class="hover:text-secondary transition-colors cursor-pointer">
-                Contact Support
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div
-          class="text-center text-gray-400 pt-6 lg:pt-8 border-t border-white/10 text-xs lg:text-sm"
-        >
-          <div
-            class="flex flex-col lg:flex-row justify-between items-center gap-4"
-          >
-            <p>&copy; 2025 A-Zentrix. All rights reserved.</p>
-            <div class="flex gap-4 lg:gap-6">
-              <a href="#" class="hover:text-secondary transition-colors"
-                >Privacy Policy</a
-              >
-              <a href="#" class="hover:text-secondary transition-colors"
-                >Terms of Service</a
-              >
-              <a href="#" class="hover:text-secondary transition-colors"
-                >Cookie Policy</a
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <div id="signInModal" class="fixed inset-0 z-50 hidden">
-      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-      <div
-        class="relative z-10 max-w-md w-full mx-4 lg:mx-auto mt-10 lg:mt-20 glass p-6 lg:p-8 rounded-2xl border border-white/10"
-      >
-        <div class="flex justify-between items-center mb-4 lg:mb-6">
-          <h3 class="text-xl lg:text-2xl font-bold gradient-text">Sign In</h3>
-          <button class="text-gray-400 hover:text-white" id="closeSignInModal">
-            <i class="ri-close-line text-2xl"></i>
-          </button>
-        </div>
-        <form id="signInForm">
-          <div class="mb-3 lg:mb-4">
-            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
-              >Email</label
-            >
-            <input
-              type="email"
-              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
-              placeholder="your@email.com"
-              required
-            />
-          </div>
-          <div class="mb-4 lg:mb-6">
-            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
-              >Password</label
-            >
-            <input
-              type="password"
-              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            class="w-full bg-primary py-2 lg:py-3 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap glow text-sm lg:text-base"
-          >
-            Sign In
-          </button>
-          <div
-            class="mt-3 lg:mt-4 text-center text-gray-400 text-sm lg:text-base"
-          >
-            <a href="#" class="hover:text-secondary">Forgot password?</a>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div id="getStartedModal" class="fixed inset-0 z-50 hidden">
-      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-      <div
-        class="relative z-10 max-w-md w-full mx-4 lg:mx-auto mt-10 lg:mt-20 glass p-6 lg:p-8 rounded-2xl border border-white/10"
-      >
-        <div class="flex justify-between items-center mb-4 lg:mb-6">
-          <h3 class="text-xl lg:text-2xl font-bold gradient-text">
+    <!-- Main content sections for the home page -->
+    <div id="home-content-sections">
+        <header id="try" class="text-center pt-40 pb-24 px-4 bg-gradient-to-r from-black via-zinc-900 to-black">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 text-emerald-400 scroll-reveal">A-Zentrix</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-zinc-901 scroll-reveal" data-animation-delay="0.2s">
+                    ENGINEERING TOMORROW'S TECHNOLOGY TODAY
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center scroll-reveal" data-animation-delay="0.4s">
+                    <a href="#signup-section" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl text-lg font-medium shadow-xl transition nav-link" data-target="signup-section">
             Get Started
-          </h3>
-          <button
-            class="text-gray-400 hover:text-white"
-            id="closeGetStartedModal"
-          >
-            <i class="ri-close-line text-2xl"></i>
-          </button>
-        </div>
-        <form id="getStartedForm">
-          <div class="mb-3 lg:mb-4">
-            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
-              >Full Name</label
-            >
-            <input
-              type="text"
-              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
-              placeholder="John Doe"
-              required
-            />
-          </div>
-          <div class="mb-3 lg:mb-4">
-            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
-              >Email</label
-            >
-            <input
-              type="email"
-              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
-              placeholder="your@email.com"
-              required
-            />
-          </div>
-          <div class="mb-3 lg:mb-4">
-            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
-              >Company</label
-            >
-            <input
-              type="text"
-              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary text-sm lg:text-base"
-              placeholder="Your Company"
-              required
-            />
-          </div>
-          <div class="mb-4 lg:mb-6">
-            <label class="block text-gray-300 mb-1 lg:mb-2 text-sm lg:text-base"
-              >What are you interested in?</label
-            >
-            <select
-              class="w-full bg-white/5 border border-white/10 rounded-button px-3 lg:px-4 py-2 lg:py-3 text-white focus:outline-none focus:border-secondary pr-8 text-sm lg:text-base"
-            >
-              <option value="">Select an option</option>
-              <option value="ai">AI Solutions</option>
-              <option value="mobile">Mobile Applications</option>
-              <option value="cloud">Cloud Services</option>
-              <option value="data">Data Analytics</option>
-            </select>
-          </div>
-          <button
-            type="submit"
-            class="w-full bg-primary py-2 lg:py-3 !rounded-button hover:opacity-90 transition-opacity whitespace-nowrap glow text-sm lg:text-base"
-          >
-            Contact Us
-          </button>
-        </form>
-      </div>
+          </a>
+                    <a href="#solutions" class="learn-more-btn bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-3 rounded-xl text-lg font-medium shadow-xl transition nav-link" data-target="home-content-sections">
+            Learn More
+          </a>
+                </div>
+            </div>
+        </header>
+        <section class="max-w-6xl mx-auto px-4 py-16 text-center scroll-reveal">
+            <h2 class="text-4xl font-extrabold text-emerald-400 mb-6 drop-shadow-lg">
+                Our Core Business Solutions
+            </h2>
+            <p class="text-zinc-400 max-w-2xl mx-auto text-lg md:text-xl">
+                A-Zentrix provides advanced AI solutions designed to transform business operations. Our innovative technology boosts efficiency, streamlines automation, and drives sustainable growth—helping you achieve more with fewer resources.
+            </p>
+        </section>
+        <section id="solutions" class="max-w-6xl mx-auto py-20 px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center text-emerald-400 scroll-reveal">Our Key Solutions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-zinc-900 p-6 rounded-2xl shadow-md glowing-card transition duration-300 hover:-translate-y-[5px] hover:scale-[1.02] hover:shadow-xl hover:shadow-emerald-500/40 scroll-reveal">
+                    <div class="text-4xl text-emerald-500 mb-4">🧠</div>
+                    <h3 class="text-xl font-semibold mb-3 text-emerald-400">AI & Machine Learning</h3>
+                    <p class="text-zinc-400">Accelerate automation, improve decision-making, and maximize operational efficiency with intelligent technology.</p>
+                </div>
+                <div class="bg-zinc-900 p-6 rounded-2xl shadow-md glowing-card transition duration-300 hover:-translate-y-[5px] hover:scale-[1.02] hover:shadow-xl hover:shadow-emerald-500/40 scroll-reveal" data-animation-delay="0.2s">
+                    <div class="text-4xl text-emerald-500 mb-4">💻</div>
+                    <h3 class="text-xl font-semibold mb-3 text-emerald-400">Custom Software Development</h3>
+                    <p class="text-zinc-400">Deliver high-performance, scalable software solutions customized to meet your unique business requirements.</p>
+                </div>
+                <div class="bg-zinc-900 p-6 rounded-2xl shadow-md glowing-card transition duration-300 hover:-translate-y-[5px] hover:scale-[1.02] hover:shadow-xl hover:shadow-emerald-500/40 scroll-reveal" data-animation-delay="0.4s">
+                    <div class="text-4xl text-emerald-500 mb-4">⚡</div>
+                    <h3 class="text-xl font-semibold mb-3 text-emerald-400">AI-Powered Automation</h3>
+                    <p class="text-zinc-400">Streamline repetitive tasks, minimizing manual work and enhancing operational efficiency.</p>
+                </div>
+            </div>
+        </section>
+        <section class="py-10 bg-zinc-901 scroll-reveal">
+            <div class="carousel-container">
+                <div class="carousel-track" aria-label="Scrolling technology icons carousel">
+                    <a href="https://nodejs.org/en" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" /></a>
+                    <a href="https://pytorch.org/" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" alt="PyTorch" /></a>
+                    <a href="https://www.tensorflow.org/" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow" /></a>
+                    <a href="https://www.blender.org/" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" alt="Blender" /></a>
+                    <a href="https://www.python.org/" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" /></a>
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" /></a>
+                    <a href="https://react.dev/" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" /></a>
+                    <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" /></a>
+                    <a href="https://git-scm.com/" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" /></a>
+                    <a href="https://www.linux.org/" target="_blank" rel="noopener noreferrer" class="carousel-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux" /></a>
+                    <a href="https://nodejs.org/en" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" /></a>
+                    <a href="https://pytorch.org/" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg" alt="PyTorch" /></a>
+                    <a href="https://www.tensorflow.org/" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow" /></a>
+                    <a href="https://www.blender.org/" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/blender/blender-original.svg" alt="Blender" /></a>
+                    <a href="https://www.python.org/" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" /></a>
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" /></a>
+                    <a href="https://react.dev/" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" /></a>
+                    <a href="https://www.docker.com/" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" /></a>
+                    <a href="https://git-scm.com/" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" /></a>
+                    <a href="https://www.linux.org/" target="_blank" rel="noopener noreferrer" class="carousel-item" aria-hidden="true"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux" /></a>
+                </div>
+            </div>
+        </section>
+        <section class="max-w-6xl mx-auto px-4 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center scroll-reveal">
+            <div class="scroll-reveal" data-animation-type="slide-left">
+                <h2 class="text-4xl font-bold mb-6 text-emerald-400">AI & Machine Learning Solutions</h2>
+                <p class="text-lg mb-6 max-w-xl leading-relaxed text-zinc-400">Our expert team develops AI and machine learning models that accelerate digital transformation. From predictive analytics to intelligent automation, we help businesses harness real-time insights and data-driven strategies that enhance
+                    operational efficiency and agility.</p>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <p class="text-zinc-400">State-of-the-art AI model development</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <p class="text-zinc-400">Predictive analytics and data-driven insights</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <p class="text-zinc-400">Enhanced operational efficiency and agility</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-emerald-500/10 to-zinc-900 rounded-2xl p-8 flex justify-center items-center shadow-lg h-full min-h-[300px] glowing-card scroll-reveal" data-animation-delay="0.2s" data-animation-type="slide-right">
+                <div class="text-center">
+                    <div class="text-7xl mb-4">📈</div>
+                    <h6 class="text-xl font-semibold text-emerald-400">Smarter Systems. Better Decisions.</h6>
+                    <p class="text-zinc-400 mt-2">Harnessing the full potential of intelligent technology</p>
+                </div>
+            </div>
+        </section>
+        <section class="max-w-6xl mx-auto px-4 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center scroll-reveal">
+            <div class="bg-gradient-to-tl from-emerald-500/10 via-zinc-900 to-black rounded-2xl p-8 flex justify-center items-center shadow-lg h-full min-h-[300px] glowing-card scroll-reveal md:order-1 order-2" data-animation-delay="0s" data-animation-type="slide-left">
+                <div class="text-center">
+                    <div class="text-7xl mb-4">💻</div>
+                    <h6 class="text-xl font-semibold text-emerald-400">Scalable Software. Built for Performance.</h6>
+                    <p class="text-zinc-400 mt-2">High-performance web and enterprise applications</p>
+                </div>
+            </div>
+            <div class="scroll-reveal md:order-2 order-1" data-animation-delay="0.2s" data-animation-type="slide-right">
+                <h2 class="text-4xl font-bold mb-6 text-emerald-400">Custom Software Development</h2>
+                <p class="text-lg mb-6 max-w-xl leading-relaxed text-zinc-400">We craft high-performance web and enterprise applications tailored to your unique goals. Whether you're launching a new platform or upgrading legacy systems, our end-to-end development services ensure speed, scalability, and seamless user
+                    experience.</p>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <p
+                            class="text-zinc-400">Dynamic web applications and robust enterprise systems</p>
+                    </div>
+                    <div class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <p
+                            class="text-zinc-400">Customized solutions to meet unique business requirements</p>
+                    </div>
+                    <div class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <p
+                            class="text-zinc-400">End-to-end development for speed, scalability, and UX</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="max-w-6xl mx-auto px-4 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center scroll-reveal">
+            <div class="scroll-reveal" data-animation-delay="0s" data-animation-type="slide-left">
+                <h2 class="text-4xl font-bold mb-6 text-emerald-400">AI-Powered Automation</h2>
+                <p class="text-lg mb-6 max-w-xl leading-relaxed text-zinc-400">Streamline workflows and eliminate repetitive tasks with our AI automation frameworks. We build intelligent systems that integrate with your operations, reducing manual intervention and empowering your teams to focus on innovation.</p>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <p
+                            class="text-zinc-400">Increase productivity through AI-powered workflows</p>
+                    </div>
+                    <div class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <p
+                            class="text-zinc-400">Minimize manual work and enhance operational efficiency</p>
+                    </div>
+                    <div class="flex items-start gap-3"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        <p
+                            class="text-zinc-400">Intelligent systems that integrate seamlessly with operations</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-tr from-emerald-500/10 via-zinc-900 to-black rounded-2xl p-8 flex justify-center items-center shadow-lg h-full min-h-[300px] glowing-card scroll-reveal" data-animation-delay="0.2s" data-animation-type="slide-right">
+                <div class="text-center">
+                    <div class="text-7xl mb-4">🤖</div>
+                    <h6 class="text-xl font-semibold text-emerald-400">Automate Smarter. Operate Faster.</h6>
+                    <p class="text-zinc-400 mt-2">Empowering your teams to focus on innovation</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="our-journey" class="max-w-6xl mx-auto px-4 py-20 text-center scroll-reveal">
+            <h2 class="text-4xl font-extrabold text-emerald-400 mb-6 drop-shadow-lg">
+                Our Journey: Innovation Rooted in Purpose
+            </h2>
+            <p class="text-zinc-400 max-w-2xl mx-auto text-lg md:text-xl">
+                A-Zentrix was founded with a mission to simplify the adoption of AI and automation for businesses of all sizes. What started as a vision to bridge technology and business needs has evolved into a full-stack solution provider helping clients thrive in
+                the AI-driven era. Today, we stand at the forefront of digital innovation—committed to building smarter systems for a smarter future.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start pt-16">
+                <div class="scroll-reveal" data-animation-type="slide-left">
+                    <h3 class="text-3xl font-bold mb-4 text-emerald-400">Our Mission</h3>
+                    <p class="text-lg leading-relaxed text-zinc-400">
+                        To deliver AI-powered solutions that drive efficiency, automate complexity, and scale business growth. We connect cutting-edge innovation with real-world application—making intelligent technology accessible and impactful.
+                    </p>
+                </div>
+                <div class="scroll-reveal" data-animation-type="slide-right" data-animation-delay="0.2s">
+                    <h3 class="text-3xl font-bold mb-4 text-emerald-400">Our Vision</h3>
+                    <p class="text-lg leading-relaxed text-zinc-400">
+                        To lead the global shift toward intelligent enterprise solutions by embedding AI across industries. Our vision is a future where organizations operate with precision, insight, and automation—powered by next-gen software and data intelligence.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="max-w-3xl mx-auto py-20 px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center text-emerald-400 scroll-reveal">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <details class="group bg-zinc-900 p-5 rounded-xl shadow glowing-card hover:bg-zinc-800 transition cursor-pointer scroll-reveal" data-animation-delay="0.1s">
+                    <summary class="flex justify-between items-center font-medium text-lg"><span>What is A-Zentrix?</span></summary>
+                    <p class="text-zinc-400 mt-3 pl-2">A-Zentrix specializes in providing cutting-edge AI, automation, and custom software development solutions for businesses, helping them improve efficiency, automate processes, and drive growth.</p>
+                </details>
+                <details class="group bg-zinc-900 p-5 rounded-xl shadow glowing-card hover:bg-zinc-800 transition cursor-pointer scroll-reveal" data-animation-delay="0.2s">
+                    <summary class="flex justify-between items-center font-medium text-lg"><span>Do you offer free trials for your solutions?</span></summary>
+                    <p class="text-zinc-400 mt-3 pl-2">We offer various service packages tailored to business needs, including consultation and project-based engagements. Contact us for a custom quote or pilot program details to see how A-Zentrix can benefit your organization.</p>
+                </details>
+                <details class="group bg-zinc-900 p-5 rounded-xl shadow glowing-card hover:bg-zinc-800 transition cursor-pointer scroll-reveal" data-animation-delay="0.3s">
+                    <summary class="flex justify-between items-center font-medium text-lg"><span>How does A-Zentrix compare to other solution providers?</span></summary>
+                    <p class="text-zinc-400 mt-3 pl-2">A-Zentrix differentiates itself by offering integrated AI, automation, and software development, providing holistic solutions for complex business challenges rather than just isolated tools. We focus on measurable ROI and tailored
+                        implementations.</p>
+                </details>
+                <details class="group bg-zinc-900 p-5 rounded-xl shadow glowing-card hover:bg-zinc-800 transition cursor-pointer scroll-reveal" data-animation-delay="0.4s">
+                    <summary class="flex justify-between items-center font-medium text-lg"><span>Can A-Zentrix solutions integrate with my existing systems?</span></summary>
+                    <p class="text-zinc-400 mt-3 pl-2">Yes, our solutions are designed for seamless integration with your existing enterprise systems and workflows. We leverage robust APIs and custom connectors to ensure a smooth transition and compatibility with your current infrastructure.</p>
+                </details>
+                <details class="group bg-zinc-900 p-5 rounded-xl shadow glowing-card hover:bg-zinc-800 transition cursor-pointer scroll-reveal" data-animation-delay="0.5s">
+                    <summary class="flex justify-between items-center font-medium text-lg"><span>What about data privacy and security for business clients?</span></summary>
+                    <p class="text-zinc-400 mt-3 pl-2">Data privacy and security are paramount. We adhere to industry best practices and compliance standards, implementing robust encryption, access controls, and regular audits to protect your sensitive business data. Enterprise-grade security
+                        is a core offering.</p>
+                </details>
+            </div>
+        </section>
+        <section id="newsletter" class="bg-gradient-to-r from-zinc-900 to-black py-20 px-4">
+            <div class="max-w-2xl mx-auto text-center bg-zinc-900/50 p-8 rounded-2xl backdrop-blur-sm border border-zinc-800 glowing-card scroll-reveal">
+                <h2 class="text-3xl font-bold text-emerald-400 mb-4">Join Our Newsletter</h2>
+                <p class="text-zinc-400 mb-6">Stay updated on the latest features, tips, and AI advancements from A-Zentrix.</p>
+                <form class="flex flex-col sm:flex-row gap-4 justify-center" action="#thank-you-section" method="GET" id="newsletter-form">
+                    <input type="email" name="email" placeholder="Your email address" required class="px-4 py-3 rounded-lg w-full bg-zinc-800 text-white border border-zinc-700 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition" />
+                    <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition whitespace-nowrap">Subscribe Now</button>
+                </form>
+                <p class="text-zinc-500 text-sm mt-4">We respect your privacy. Unsubscribe at any time.</p>
+            </div>
+        </section>
     </div>
+    <!-- End of home-content-sections -->
+
+    <!-- About Us Section -->
+    <section id="about-section" class="content-page-section bg-zinc-900 text-white justify-center">
+        <div class="text-center max-w-3xl mx-auto">
+            <h1 class="text-5xl font-bold text-emerald-400 mb-8">About A-Zentrix</h1>
+            <div class="bg-zinc-800 p-8 rounded-lg shadow-xl text-left space-y-6">
+                <p class="text-xl text-zinc-300 leading-relaxed">
+                    A-Zentrix provides advanced AI solutions designed to transform business operations. Our innovative technology boosts efficiency, streamlines automation, and drives sustainable growth—helping you achieve more with fewer resources.
+                </p>
+                <p class="text-zinc-300 leading-relaxed">
+                    To lead the global shift toward intelligent enterprise solutions by embedding AI across industries. Our vision is a future where organizations operate with precision, insight, and automation—powered by next-gen software and data intelligence.
+                </p>
+                <h2 class="text-3xl font-semibold text-emerald-300 pt-4">Our Vision</h2>
+                <p class="text-zinc-300 leading-relaxed">
+                    To be the leading AI assistant that seamlessly integrates into every workflow, fostering creativity, boosting productivity, and solving complex problems for a better future.
+                </p>
+                <h2 class="text-3xl font-semibold text-emerald-300 pt-4">Our Values</h2>
+                <ul class="list-disc list-inside text-zinc-300 space-y-2">
+                    <li>Innovation: Constantly exploring new frontiers in AI.</li>
+                    <li>Integrity: Upholding the highest ethical standards.</li>
+                    <li>Collaboration: Working together with our users and partners.</li>
+                    <li>Excellence: Striving for the best in everything we do.</li>
+                </ul>
+            </div>
+            <a href="#home" class="mt-12 inline-block bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition nav-link" data-target="home-content-sections">
+            ← Back to Home
+        </a>
+        </div>
+    </section>
+
+    <!-- Subscribe Thank You Section -->
+    <section id="thank-you-section" class="content-page-section bg-zinc-900 text-white justify-center">
+        <div class="text-center max-w-lg mx-auto">
+            <div class="text-6xl text-emerald-400 mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-emerald-400 mb-6">Thank You for Subscribing!</h1>
+            <p class="text-lg md:text-xl text-zinc-300 mb-10">
+                You're all set! You'll now receive the latest news, updates, and insights from A-Zentrix directly to your inbox.
+            </p>
+            <p class="text-zinc-400 mb-4">
+                Please check your email for a confirmation message (in a real scenario, this would happen!).
+            </p>
+            <a href="#home" class="mt-8 inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-lg font-medium transition text-lg nav-link" data-target="home-content-sections">
+            ← Back to Home
+        </a>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog-section" class="content-page-section bg-zinc-900 text-white flex-col pt-20">
+        <div class="text-center w-full max-w-4xl mx-auto">
+            <h1 class="text-5xl font-bold text-emerald-400 mb-8">A-Zentrix Blog</h1>
+            <p class="text-xl text-zinc-300 mb-12">Latest news, updates, and insights from the A-Zentrix team.</p>
+
+            <!-- New Blog Post: A-ZENTRIX Introduction -->
+            <article class="bg-zinc-800 p-6 rounded-lg shadow-xl mb-8 text-left">
+                <h2 class="text-3xl font-semibold text-emerald-300 mb-3">
+                    <a href="#" class="hover:underline">Introducing A-ZENTRIX: Pioneering AI and Tech Solutions</a>
+                </h2>
+
+                <!-- Initial visible content -->
+                <p class="text-zinc-400 leading-relaxed mb-4">
+                    In today’s fast-paced digital landscape, businesses are constantly seeking innovative ways to enhance efficiency, improve customer experiences, and stay ahead of the competition. At A-ZENTRIX, we understand the challenges organizations face in this rapidly
+                    evolving environment. That’s why we are committed to providing cutting-edge AI and tech-based solutions that empower businesses to thrive.
+                </p>
+
+                <!-- Expandable content starts here -->
+                <div id="blog-expandable-content-1" class="hidden">
+                    <h3 class="text-2xl font-semibold text-emerald-200 mt-6 mb-2">Who We Are</h3>
+                    <p class="text-zinc-400 leading-relaxed mb-4">
+                        A-ZENTRIX is a forward-thinking technology company specializing in artificial intelligence, machine learning, and advanced tech solutions tailored to meet the unique needs of our clients. Our team of experts combines deep industry knowledge with a passion
+                        for innovation, ensuring that we deliver solutions that not only meet but exceed expectations.
+                    </p>
+
+                    <h3 class="text-2xl font-semibold text-emerald-200 mt-6 mb-2">Our Solutions</h3>
+
+                    <h4 class="text-xl font-semibold text-emerald-100 mt-4 mb-1">1. AI-Powered Analytics</h4>
+                    <p class="text-zinc-400 leading-relaxed mb-4">
+                        Data is the new oil, and at A-ZENTRIX, we harness the power of AI to transform raw data into actionable insights. Our AI-powered analytics tools help businesses make informed decisions by providing real-time data analysis, predictive modeling, and trend
+                        forecasting. Whether you’re looking to optimize operations or enhance customer engagement, our analytics solutions are designed to drive results.
+                    </p>
+
+                    <h4 class="text-xl font-semibold text-emerald-100 mt-4 mb-1">2. Custom Software Development</h4>
+                    <p class="text-zinc-400 leading-relaxed mb-4">
+                        Every business is unique, and so are its challenges. Our custom software development services are tailored to address your specific needs. From mobile applications to enterprise software, we work closely with you to create solutions that streamline processes,
+                        improve productivity, and enhance user experiences.
+                    </p>
+
+                    <h<h4> class="text-xl font-semibold text-emerald-100 mt-4 mb-1">3. Machine Learning Solutions</h4>
+                        <p class="text-zinc-400 leading-relaxed mb-4">
+                            Machine learning is at the forefront of technological advancement, and A-ZENTRIX is here to help you leverage its potential. Our machine learning solutions enable businesses to automate processes, improve accuracy, and gain deeper insights into customer
+                            behavior. By integrating machine learning into your operations, you can unlock new opportunities for growth and innovation.
+                        </p>
+
+                        <h4 class="text-xl font-semibold text-emerald-100 mt-4 mb-1">4. Cloud Solutions</h4>
+                        <p class="text-zinc-400 leading-relaxed mb-4">
+                            In an era where flexibility and scalability are paramount, our cloud solutions provide businesses with the infrastructure they need to succeed. From cloud migration to management, we ensure that your data is secure, accessible, and optimized for performance.
+                            With A-ZENTRIX, you can focus on what you do best while we handle the tech.
+                        </p>
+
+                        <h4 class="text-xl font-semibold text-emerald-100 mt-4 mb-1">5. Cybersecurity Services</h4>
+                        <p class="text-zinc-400 leading-relaxed mb-4">
+                            As technology evolves, so do the threats that come with it. Our cybersecurity services are designed to protect your business from potential risks and vulnerabilities. We offer comprehensive security assessments, threat detection, and incident response
+                            strategies to ensure that your data and systems remain secure.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-emerald-200 mt-6 mb-2">Why Choose A-ZENTRIX?</h3>
+
+                        <h4 class="text-xl font-semibold text-emerald-100 mt-4 mb-1">Expertise and Experience</h4>
+                        <p class="text-zinc-400 leading-relaxed mb-4">
+                            With a team of seasoned professionals, A-ZENTRIX brings a wealth of experience across various industries. We understand the nuances of different sectors and tailor our solutions accordingly.
+                        </p>
+
+                        <h4 class="text-xl font-semibold text-emerald-100 mt-4 mb-1">Customer-Centric Approach</h4>
+                        <p class="text-zinc-400 leading-relaxed mb-4">
+                            At A-ZENTRIX, our clients are at the heart of everything we do. We prioritize understanding your unique challenges and goals, ensuring that our solutions align with your vision.
+                        </p>
+
+                        <h4 class="text-xl font-semibold text-emerald-100 mt-4 mb-1">Innovation-Driven</h4>
+                        <p class="text-zinc-400 leading-relaxed mb-4">
+                            We are passionate about technology and continuously explore new trends and advancements. Our commitment to innovation means that you’ll always receive the most up-to-date solutions that drive success.
+                        </p>
+
+                        <h4 class="text-xl font-semibold text-emerald-100 mt-4 mb-1">Proven Track Record</h4>
+                        <p class="text-zinc-400 leading-relaxed mb-4">
+                            Our success stories speak for themselves. We have helped numerous businesses transform their operations and achieve their goals through our AI and tech-based solutions.
+                        </p>
+
+                        <h3 class="text-2xl font-semibold text-emerald-200 mt-6 mb-2">Conclusion</h3>
+                        <p class="text-zinc-400 leading-relaxed mb-4">
+                            In a world where technology is constantly evolving, partnering with a reliable and innovative tech solution provider is essential. A-ZENTRIX is dedicated to helping businesses navigate this landscape with confidence. Whether you’re looking to implement
+                            AI-driven analytics, develop custom software, or enhance your cybersecurity measures, we have the expertise and solutions to help you succeed.
+                        </p>
+                        <p class="text-zinc-400 leading-relaxed">
+                            Ready to unlock the future of your business? Contact A-ZENTRIX today and let’s embark on a journey of innovation together!
+                        </p>
+                </div>
+                <!-- Expandable content ends here -->
+
+                <a href="#" id="blog-read-more-btn-1" class="inline-block mt-4 text-emerald-400 hover:text-emerald-300 font-medium">Read More →</a>
+            </article>
+
+            <a href="#home" class="mt-12 inline-block bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition nav-link" data-target="home-content-sections">
+            ← Back to Home
+        </a>
+        </div>
+    </section>
+
+    <!-- Legal Information Section -->
+    <section id="legal-section" class="content-page-section bg-zinc-900 text-white flex-col pt-20">
+        <div class="text-center w-full max-w-3xl mx-auto">
+            <h1 class="text-5xl font-bold text-emerald-400 mb-8">Legal Information</h1>
+
+            <div class="bg-zinc-800 p-8 rounded-lg shadow-xl text-left space-y-6">
+                <section class="mb-8">
+                    <h2 class="text-3xl font-semibold text-emerald-300 mb-4">Terms of Service</h2>
+                    <p class="text-zinc-400 leading-relaxed mb-2">Last Updated: January 26, 2025</p>
+                    <p class="text-zinc-400 leading-relaxed">
+                        Welcome to A-Zentrix! These Terms of Service ("Terms") govern your use of our website, applications, and services (collectively, the "Services"). By accessing or using our Services, you agree to be bound by these Terms.
+                    </p>
+                    <h3 class="text-xl font-medium text-emerald-200 mt-4 mb-2">1. Use of Our Services</h3>
+                    <p class="text-zinc-400 leading-relaxed">
+                        You must be at least 13 years old to use our Services. If you are under 18, you must have your parent or legal guardian's permission to use the Services. You agree not to misuse the Services or help anyone else to do so.
+                    </p>
+                    <h3 class="text-xl font-medium text-emerald-200 mt-4 mb-2">2. Your Content</h3>
+                    <p class="text-zinc-400 leading-relaxed">
+                        You retain ownership of any intellectual property rights that you hold in the content you submit to our Services. When you upload, submit, store, send or receive content to or through our Services, you give A-Zentrix a worldwide license to use, host,
+                        store, reproduce, modify, create derivative works...
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed mt-2">
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-3xl font-semibold text-emerald-300 mb-4">Privacy Policy</h2>
+                    <p class="text-zinc-400 leading-relaxed mb-2">Last Updated: January 26, 2025</p>
+                    <p class="text-zinc-400 leading-relaxed">
+                        A-Zentrix ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our Services.
+                    </p>
+                    <h3 class="text-xl font-medium text-emerald-200 mt-4 mb-2">1. Information We Collect</h3>
+                    <p class="text-zinc-400 leading-relaxed">
+                        We may collect personal information that you voluntarily provide to us when you register on the Services, express an interest in obtaining information about us or our products and services, when you participate in activities on the Services, or otherwise
+                        when you contact us.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed mt-2">
+                    </p>
+                </section>
+            </div>
+
+            <a href="#home" class="mt-12 inline-block bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition nav-link" data-target="home-content-sections">
+            ← Back to Home
+        </a>
+        </div>
+    </section>
+
+    <!-- Careers Section -->
+    <section id="careers-section" class="content-page-section bg-zinc-900 text-white flex-col pt-20">
+        <div class="text-center w-full max-w-3xl mx-auto">
+            <h1 class="text-5xl font-bold text-emerald-400 mb-8">Join Our Team at A-Zentrix</h1>
+            <p class="text-xl text-zinc-300 mb-12">
+                We're looking for talented and passionate individuals to help us shape the future of AI. If you're excited about innovation and want to make an impact, A-Zentrix is the place for you.
+            </p>
+
+            <div class="bg-zinc-800 p-8 rounded-lg shadow-xl text-left space-y-8">
+                <div>
+                    <h2 class="text-2xl font-semibold text-emerald-300 mb-2">Why Work With Us?</h2>
+                    <ul class="list-disc list-inside text-zinc-400 space-y-2">
+                        <li>Work on cutting-edge AI technology.</li>
+                        <li>Collaborative and inclusive work environment.</li>
+                        <li>Opportunities for growth and development.</li>
+                        <li>Competitive salary and benefits.</li>
+                        <li>Make a real-world impact.</li>
+                    </ul>
+                </div>
+
+
+                <p class="text-zinc-400">
+                    Don't see a role that fits? We're always looking for exceptional talent.
+                    <a href="mailto:careers@azentrix-placeholder.com" class="text-emerald-400 hover:underline">Send us your resume!</a>
+                </p>
+            </div>
+        </div>
+
+        <a href="#home" class="mt-12 inline-block bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition nav-link" data-target="home-content-sections">
+            ← Back to Home
+        </a>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="documentation-section" class="content-page-section bg-zinc-900 text-white justify-center">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold text-emerald-400 mb-8">A-Zentrix Documentation</h1>
+            <p class="text-xl text-zinc-300 mb-10">Find all the information you need to get started and master A-Zentrix.</p>
+            <div class="max-w-2xl mx-auto text-left space-y-4 bg-zinc-800 p-8 rounded-lg shadow-xl">
+                <h2 class="text-2xl font-semibold text-emerald-300">Getting Started</h2>
+                <p class="text-zinc-400">This section will guide you through the initial setup...</p>
+                <h2 class="text-2xl font-semibold text-emerald-300">API Reference</h2>
+                <p class="text-zinc-400">Detailed information about our API endpoints...</p>
+                <h2 class="text-2xl font-semibold text-emerald-300">Troubleshooting</h2>
+                <p class="text-zinc-400">Common issues and their solutions...</p>
+            </div>
+            <a href="#home" class="mt-12 inline-block bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition nav-link" data-target="home-content-sections">
+            ← Back to Home
+        </a>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community-section" class="content-page-section bg-zinc-900 text-white justify-center">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold text-emerald-400 mb-8">Join the A-Zentrix Community</h1>
+            <p class="text-xl text-zinc-300 mb-10">Connect with other users, share your projects, and get help.</p>
+
+            <div class="max-w-2xl mx-auto space-y-6 bg-zinc-800 p-8 rounded-lg shadow-xl">
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold text-emerald-300 mb-2">Forum</h2>
+                    <p class="text-zinc-400">Discuss features, ask questions, and share tips on our community forum. <a href="#" class="text-emerald-500 hover:underline">Visit Forum →</a></p>
+                </div>
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold text-emerald-300 mb-2">Discord Server</h2>
+                    <p class="text-zinc-400">Join our Discord server for real-time chat and support. <a href="#" class="text-emerald-500 hover:underline">Join Discord →</a></p>
+                </div>
+                <div class="text-left">
+                    <h2 class="text-2xl font-semibold text-emerald-300 mb-2">User Showcase</h2>
+                    <p class="text-zinc-400">See what amazing things others are building with A-Zentrix. <a href="#" class="text-emerald-500 hover:underline">View Showcase →</a></p>
+                </div>
+            </div>
+            <a href="#home" class="mt-12 inline-block bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition nav-link" data-target="home-content-sections">
+            ← Back to Home
+        </a>
+        </div>
+    </section>
+
+    <!-- Sign Up Section -->
+    <section id="signup-section" class="content-page-section bg-zinc-900 text-white justify-center">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold text-emerald-400 mb-8">Sign Up for A-Zentrix</h1>
+            <p class="text-xl text-zinc-300 mb-10">Join us and experience the future of AI assistance.</p>
+            <!-- Placeholder Sign Up Form -->
+            <form action="#home" method="GET" class="max-w-md mx-auto bg-zinc-800 p-8 rounded-lg shadow-xl" id="signup-form">
+                <div class="mb-6">
+                    <label for="email" class="block text-sm font-medium text-zinc-300 mb-2">Email Address</label>
+                    <input type="email" name="email" id="email" required class="w-full px-4 py-3 rounded-lg bg-zinc-700 border border-zinc-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-white" placeholder="you@example.com">
+                </div>
+                <div class="mb-8">
+                    <label for="password" class="block text-sm font-medium text-zinc-300 mb-2">Password</label>
+                    <input type="password" name="password" id="password" required class="w-full px-4 py-3 rounded-lg bg-zinc-700 border border-zinc-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-white" placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition">
+                Create Account
+            </button>
+            </form>
+            <p class="mt-8 text-zinc-400">
+                Already have an account? <a href="#" class="text-emerald-400 hover:underline">Log In</a>
+            </p>
+
+            <a href="#home" class="mt-12 inline-block bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition nav-link" data-target="home-content-sections">
+            ← Back to Home
+        </a>
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="contact-section" class="content-page-section bg-zinc-900 text-white justify-center">
+        <div class="text-center max-w-xl w-full">
+            <h1 class="text-5xl font-bold text-emerald-400 mb-8">Get in Touch</h1>
+            <p class="text-xl text-zinc-300 mb-10">We'd love to hear from you! Whether you have a question about features, trials, or anything else, our team is ready to answer all your questions.</p>
+
+            <form action="#home" method="POST" class="bg-zinc-800 p-8 rounded-lg shadow-xl space-y-6" id="contact-form">
+                <div>
+                    <label for="contact-name" class="block text-sm font-medium text-zinc-300 mb-1 text-left">Full Name</label>
+                    <input type="text" name="name" id="contact-name" required class="w-full px-4 py-3 rounded-lg bg-zinc-700 border border-zinc-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-white" placeholder="Your Name">
+                </div>
+                <div>
+                    <label for="contact-email" class="block text-sm font-medium text-zinc-300 mb-1 text-left">Email Address</label>
+                    <input type="email" name="email" id="contact-email" required class="w-full px-4 py-3 rounded-lg bg-zinc-700 border border-zinc-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-white" placeholder="you@example.com">
+                </div>
+                <div>
+                    <label for="contact-subject" class="block text-sm font-medium text-zinc-300 mb-1 text-left">Subject</label>
+                    <input type="text" name="subject" id="contact-subject" required class="w-full px-4 py-3 rounded-lg bg-zinc-700 border border-zinc-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-white" placeholder="How can we help?">
+                </div>
+                <div>
+                    <label for="contact-message" class="block text-sm font-medium text-zinc-300 mb-1 text-left">Message</label>
+                    <textarea name="message" id="contact-message" rows="4" required class="w-full px-4 py-3 rounded-lg bg-zinc-700 border border-zinc-600 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none text-white" placeholder="Your message..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium transition">
+                Send Message
+            </button>
+            </form>
+
+            <div class="mt-10 text-zinc-400">
+                <p>You can also reach us at:</p>
+                <p>Email: <a href="mailto:support@azentrix-placeholder.com" class="text-emerald-400 hover:underline">support@azentrix-placeholder.com</a></p>
+                <p>Phone: +1 (555) 123-4567 (Mon-Fri, 9am-5pm PST)</p>
+            </div>
+
+            <a href="#home" class="mt-12 inline-block bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition nav-link" data-target="home-content-sections">
+            ← Back to Home
+        </a>
+        </div>
+    </section>
+
+    <footer class="bg-zinc-900 py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="scroll-reveal">
+                    <a href="#home" class="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2 transition nav-link" data-target="home-content-sections">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>                        A-Zentrix
+                    </a>
+                    <p class="text-zinc-400 mt-2">Your partner for AI-driven business transformation.</p>
+                </div>
+                <div class="scroll-reveal" data-animation-delay="0.1s">
+                    <h4 class="text-lg font-semibold mb-4 text-white">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#solutions" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="home-content-sections">Solutions</a></li>
+                        <li><a href="#our-journey-section" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="our-journey-section">Our Journey</a></li>
+                        <li><a href="#newsletter" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="home-content-sections">News & Updates</a></li>
+                    </ul>
+                </div>
+                <div class="scroll-reveal" data-animation-delay="0.2s">
+                    <h4 class="text-lg font-semibold mb-4 text-white">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#faq" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="home-content-sections">FAQ</a></li>
+                        <li><a href="#documentation-section" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="documentation-section">Documentation</a></li>
+                        <li><a href="#community-section" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="community-section">Community</a></li>
+                        <li><a href="#blog-section" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="blog-section">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="scroll-reveal" data-animation-delay="0.3s">
+                    <h4 class="text-lg font-semibold mb-4 text-white">Connect</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#about-section" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="about-section">About Us</a></li>
+                        <li><a href="#careers-section" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="careers-section">Careers</a></li>
+                        <li><a href="#contact-section" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="contact-section">Contact</a></li>
+                        <li><a href="#legal-section" class="text-zinc-400 hover:text-emerald-400 transition nav-link" data-target="legal-section">Legal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-zinc-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center scroll-reveal" data-animation-delay="0.4s">
+                <p class="text-zinc-500 mb-4 md:mb-0">© <span id="year"></span> A-Zentrix. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="https://twitter.com/azentrix_ai_placeholder" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-emerald-400 transition" aria-label="Twitter profile"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" /></svg></a>
+                    <a href="https://instagram.com/azentrix_ai_placeholder" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-emerald-400 transition" aria-label="Instagram profile"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg></a>
+                    <a href="https://www.linkedin.com/company/a-zentrix" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-emerald-400 transition" aria-label="LinkedIn profile"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script>
-      // Mobile Menu Toggle
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-      const menuIcon = document.getElementById('menuIcon');
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
 
-      function toggleMobileMenu() {
-        const isHidden = mobileMenu.classList.contains('hidden');
-        mobileMenu.classList.toggle('hidden', !isHidden);
-        mobileMenu.classList.toggle('flex', isHidden);
-
-        // Toggle menu icon
-        if (isHidden) {
-          menuIcon.classList.replace('ri-menu-line', 'ri-close-line');
-        } else {
-          menuIcon.classList.replace('ri-close-line', 'ri-menu-line');
-        }
-
-        // Toggle body overflow
-        document.body.style.overflow = isHidden ? 'hidden' : '';
-      }
-
-      mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-
-      // Close mobile menu when clicking on links
-      document.querySelectorAll('#mobileMenu a').forEach(link => {
-        link.addEventListener('click', () => {
-          mobileMenu.classList.add('hidden');
-          mobileMenu.classList.remove('flex');
-          menuIcon.classList.replace('ri-close-line', 'ri-menu-line');
-          document.body.style.overflow = '';
-        });
-      });
-
-      // Modal Management System
-      class Modal {
-        constructor(modalId, openButtons, closeButton) {
-          this.modal = document.getElementById(modalId);
-          this.openButtons = Array.isArray(openButtons) ? openButtons : [openButtons];
-          this.closeButton = closeButton;
-
-          this.init();
-        }
-
-        init() {
-          // Open modal events
-          this.openButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.preventDefault();
-              this.open();
+            const backToTop = document.getElementById("backToTop");
+            window.addEventListener("scroll", () => {
+                backToTop.style.display = window.scrollY > 300 ? "block" : "none";
             });
-          });
-
-          // Close modal events
-          if (this.closeButton) {
-            this.closeButton.addEventListener('click', (e) => {
-              e.preventDefault();
-              this.close();
+            backToTop.addEventListener("click", () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
             });
-          }
 
-          // Close when clicking outside
-          this.modal.addEventListener('click', (e) => {
-            if (e.target === this.modal) {
-              this.close();
+            const themeToggle = document.getElementById("themeToggle");
+            const themeIcon = document.getElementById("themeIcon");
+            const body = document.body;
+
+            function applyTheme(theme) {
+                if (theme === "light") {
+                    body.classList.add("bg-white");
+                    body.classList.remove("bg-black", "text-white"); // Old Tailwind dark
+                    body.classList.remove("dark-theme-bg", "dark-theme-text"); // Custom dark
+                    themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />';
+                    localStorage.setItem("theme", "light");
+                } else { // Dark theme
+                    body.classList.remove("bg-white");
+                    body.classList.remove("bg-black", "text-white"); // Old Tailwind dark
+                    body.classList.add("dark-theme-bg", "dark-theme-text"); // Custom dark
+                    themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 0 11-8 0 4 4 0 018 0z" />';
+                    localStorage.setItem("theme", "dark");
+                }
             }
-          });
-        }
 
-        open() {
-          // Close mobile menu if open
-          mobileMenu.classList.add('hidden');
-          mobileMenu.classList.remove('flex');
-          menuIcon.classList.replace('ri-close-line', 'ri-menu-line');
-
-          this.modal.classList.remove('hidden');
-          document.body.style.overflow = 'hidden';
-        }
-
-        close() {
-          this.modal.classList.add('hidden');
-          document.body.style.overflow = '';
-        }
-      }
-
-      // Initialize modals
-      const signInModal = new Modal(
-        'signInModal',
-        [
-          document.getElementById('signInBtn'),
-          document.getElementById('mobileSignInBtn')
-        ],
-        document.getElementById('closeSignInModal')
-      );
-
-      const getStartedModal = new Modal(
-        'getStartedModal',
-        [
-          document.getElementById('getStartedBtn'),
-          document.getElementById('mobileGetStartedBtn')
-        ],
-        document.getElementById('closeGetStartedModal')
-      );
-
-      // Form Submissions
-      function handleFormSubmission(form, successMessage, resetForm = true) {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-
-          const submitBtn = form.querySelector('button[type="submit"]');
-          const originalText = submitBtn.innerHTML;
-          submitBtn.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Processing...';
-          submitBtn.disabled = true;
-
-          // Simulate form submission
-          setTimeout(() => {
-            const messageElement = document.createElement('div');
-            messageElement.className = 'mt-4 p-3 bg-secondary/20 text-secondary rounded-button text-center';
-            messageElement.textContent = successMessage;
-            form.appendChild(messageElement);
-
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-
-            if (resetForm) form.reset();
-
-            setTimeout(() => {
-              if (form.contains(messageElement)) {
-                form.removeChild(messageElement);
-              }
-            }, 3000);
-          }, 1500);
-        });
-      }
-
-      // Initialize form handlers
-      if (document.getElementById('signInForm')) {
-        handleFormSubmission(
-          document.getElementById('signInForm'),
-          'Sign in successful! Redirecting...',
-          false
-        );
-      }
-
-      if (document.getElementById('getStartedForm')) {
-        handleFormSubmission(
-          document.getElementById('getStartedForm'),
-          'Thank you! We\'ll contact you soon.'
-        );
-      }
-
-      if (document.getElementById('contactForm')) {
-        handleFormSubmission(
-          document.getElementById('contactForm'),
-          'Message sent successfully! We\'ll get back to you soon.'
-        );
-      }
-
-      // Smooth Scrolling
-      document.querySelectorAll('.nav-link, a[href^="#"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.classList.contains('nav-link')
-            ? this.getAttribute('data-target')
-            : this.getAttribute('href').substring(1);
-
-          if (targetId === 'home') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            return;
-          }
-
-          const targetSection = document.getElementById(targetId);
-          if (targetSection) {
-            window.scrollTo({
-              top: targetSection.offsetTop - 80,
-              behavior: 'smooth'
-            });
-          }
-        });
-      });
-
-      // Active Navigation State
-      window.addEventListener('scroll', () => {
-        const sections = ['about', 'services', 'blog', 'contact'];
-        let current = window.scrollY < 100 ? 'home' : '';
-
-        if (!current) {
-          sections.forEach(section => {
-            const element = document.getElementById(section);
-            if (element) {
-              const rect = element.getBoundingClientRect();
-              if (rect.top <= 100 && rect.bottom >= 100) {
-                current = section;
-              }
+            const storedTheme = localStorage.getItem("theme");
+            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            if (storedTheme === "light") {
+                applyTheme("light");
+            } else if (storedTheme === "dark") {
+                applyTheme("dark");
+            } else {
+                applyTheme(prefersDark ? "dark" : "light");
             }
-          });
-        }
 
-        document.querySelectorAll('.nav-link').forEach(link => {
-          link.classList.toggle(
-            'text-secondary',
-            link.getAttribute('data-target') === current
-          );
+            themeToggle.addEventListener("click", () => {
+                const isCurrentlyDark = body.classList.contains("dark-theme-bg");
+                applyTheme(isCurrentlyDark ? "light" : "dark");
+            });
+
+            const mobileMenuButton = document.getElementById("mobileMenuButton");
+            const mobileMenu = document.getElementById("mobileMenu");
+            mobileMenuButton.addEventListener("click", () => {
+                const isExpanded = mobileMenuButton.getAttribute("aria-expanded") === "true" || false;
+                mobileMenuButton.setAttribute("aria-expanded", !isExpanded);
+                mobileMenu.classList.toggle("hidden");
+            });
+            // Mobile menu links now handled by the general page navigation
+            mobileMenu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuButton.setAttribute("aria-expanded", "false");
+                    mobileMenu.classList.add("hidden");
+                });
+            });
+
+            // Updated Intersection Observer logic for new animations
+            const animatedElements = document.querySelectorAll('.scroll-reveal');
+            if (animatedElements.length > 0) {
+                const observer = new IntersectionObserver((entries, observerInstance) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const delay = entry.target.dataset.animationDelay;
+                            if (delay) entry.target.style.animationDelay = delay;
+
+                            const animationType = entry.target.dataset.animationType;
+                            if (animationType === 'slide-left') {
+                                entry.target.classList.add('slide-left-visible');
+                            } else if (animationType === 'slide-right') {
+                                entry.target.classList.add('slide-right-visible');
+                            } else {
+                                entry.target.classList.add('visible'); // Default fadeIn
+                            }
+                            observerInstance.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    root: null,
+                    threshold: 0.1
+                });
+                animatedElements.forEach(el => observer.observe(el));
+            }
+
+            const floatingCta = document.getElementById("floatingCta");
+            const chatbotContainer = document.getElementById("chatbotContainer");
+            const closeChatbot = document.getElementById("closeChatbot");
+            const chatbotMessages = document.getElementById("chatbotMessages");
+            const chatbotInput = document.getElementById("chatbotInput");
+            const chatbotSendButton = document.getElementById("chatbotSendButton");
+            const typingIndicator = document.getElementById("typingIndicator");
+            let chatHistory = [];
+
+            function formatTimestamp(date) {
+                let hours = date.getHours();
+                let minutes = date.getMinutes();
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                return `${hours}:${minutes} ${ampm}`;
+            }
+
+            function addMessageToUI(messageText, sender, timestamp = new Date()) {
+                const messageElement = document.createElement("div");
+                messageElement.classList.add("chatbot-message", sender === "user" ? "user-message" : "bot-message");
+                messageElement.textContent = messageText;
+                const timestampElement = document.createElement("span");
+                timestampElement.classList.add("message-timestamp");
+                timestampElement.textContent = formatTimestamp(new Date(timestamp));
+                messageElement.appendChild(timestampElement);
+                chatbotMessages.insertBefore(messageElement, typingIndicator);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                if (!chatHistory.find(msg => msg.timestamp === new Date(timestamp).toISOString() && msg.text === messageText)) {
+                    chatHistory.push({
+                        text: messageText,
+                        sender,
+                        timestamp: new Date(timestamp).toISOString()
+                    });
+                    saveChatHistory();
+                }
+            }
+
+            function showTypingIndicator() {
+                typingIndicator.classList.remove('hidden');
+                typingIndicator.classList.add('flex');
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+
+            function hideTypingIndicator() {
+                typingIndicator.classList.add('hidden');
+                typingIndicator.classList.remove('flex');
+            }
+
+            function getBotResponse(userMessageText) {
+                showTypingIndicator();
+                let botMessageText = "I'm not quite sure how to answer that. Could you try asking about A-Zentrix's 'solutions', 'our journey', 'contact', or perhaps 'security'?";
+                const lowerUserMessage = userMessageText.toLowerCase();
+                if (lowerUserMessage.includes("hello") || lowerUserMessage.includes("hi") || lowerUserMessage.includes("hey")) {
+                    botMessageText = "Hello! 👋 I'm A-Zentrix Assistant. How can I assist your business today?";
+                } else if (lowerUserMessage.match(/how are you( doing)?\??$/)) {
+                    botMessageText = "I'm optimizing processes for you! What's on your mind?";
+                } else if (lowerUserMessage.includes("solutions") || lowerUserMessage.includes("what can you do") || lowerUserMessage.includes("services")) {
+                    botMessageText = "A-Zentrix offers cutting-edge AI & Machine Learning solutions, Custom Software Development, and AI-Powered Automation. We help businesses achieve efficiency, automation, and scalable growth.";
+                } else if (lowerUserMessage.includes("ai and machine learning")) {
+                    botMessageText = "Our AI & Machine Learning solutions focus on developing advanced models for predictive analytics, intelligent automation, and enhancing operational efficiency for your business.";
+                } else if (lowerUserMessage.includes("custom software development")) {
+                    botMessageText = "We specialize in crafting high-performance web and enterprise applications tailored to your specific business goals, ensuring speed, scalability, and an excellent user experience.";
+                } else if (lowerUserMessage.includes("ai-powered automation") || lowerUserMessage.includes("automation")) {
+                    botMessageText = "Our AI-Powered Automation streamlines workflows, eliminates repetitive tasks, and integrates intelligent systems to reduce manual intervention, freeing your teams to focus on innovation.";
+                } else if (lowerUserMessage.includes("pricing") || lowerUserMessage.includes("cost")) {
+                    botMessageText = "Our solutions are tailored to specific business needs. Please contact our sales team through the 'Contact' link in the footer to discuss your requirements and get a custom quote. We don't offer generic pricing.";
+                } else if (lowerUserMessage.includes("thanks") || lowerUserMessage.includes("thank you")) {
+                    botMessageText = "You're very welcome! Is there anything else I can assist your business with?";
+                } else if (lowerUserMessage.includes("bye") || lowerUserMessage.includes("goodbye") || lowerUserMessage.includes("see ya")) {
+                    botMessageText = "Goodbye for now! We look forward to helping you transform your business. ✨";
+                } else if (lowerUserMessage.match(/what is your name|who are you/)) {
+                    botMessageText = "I'm A-Zentrix Assistant, here to provide information about A-Zentrix's business solutions.";
+                } else if (lowerUserMessage.includes("help") || lowerUserMessage.includes("support")) {
+                    botMessageText = "I'm here to provide information about A-Zentrix's offerings. If you need technical support or detailed consultation, please use the 'Contact' link in the footer to reach our team directly.";
+                } else if (lowerUserMessage.includes("documentation") || lowerUserMessage.includes("docs")) {
+                    botMessageText = "While we don't have public API docs for general use, we offer comprehensive documentation and support for our clients regarding their implemented solutions. Please refer to your project resources or contact our support team.";
+                } else if (lowerUserMessage.includes("our journey") || lowerUserMessage.includes("about us")) {
+                    botMessageText = "A-Zentrix was founded to bridge the gap between businesses and AI-driven innovation. We aim to empower organizations with advanced AI, automation, and software services to achieve more with less. You can read more in the 'Our Journey' section on the page.";
+                } else if (lowerUserMessage.includes("mission") || lowerUserMessage.includes("vision")) {
+                    botMessageText = "Our mission is to deliver AI-powered solutions that drive efficiency, automate complexity, and scale business growth. Our vision is to lead the global shift towards intelligent enterprise solutions by embedding AI across industries.";
+                } else if (lowerUserMessage.includes("security") || lowerUserMessage.includes("privacy")) {
+                    botMessageText = "Data privacy and security are paramount. We adhere to industry best practices and compliance standards, implementing robust encryption and access controls to protect your sensitive business data.";
+                }
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessageToUI(botMessageText, 'bot');
+                }, 1200 + Math.random() * 800);
+            }
+
+            function handleSendMessage() {
+                const messageText = chatbotInput.value.trim();
+                if (messageText) {
+                    addMessageToUI(messageText, 'user');
+                    chatbotInput.value = "";
+                    chatbotInput.focus();
+                    getBotResponse(messageText);
+                }
+            }
+
+            function saveChatHistory() {
+                localStorage.setItem('aZentrixChatHistory', JSON.stringify(chatHistory));
+            }
+
+            function loadChatHistory() {
+                const savedHistory = localStorage.getItem('aZentrixChatHistory');
+                if (savedHistory) {
+                    chatHistory = JSON.parse(savedHistory);
+                    const messagesToRemove = Array.from(chatbotMessages.children).filter(child => child.id !== 'typingIndicator');
+                    messagesToRemove.forEach(child => child.remove());
+                    chatHistory.forEach(msg => {
+                        addMessageToUI(msg.text, msg.sender, new Date(msg.timestamp));
+                    });
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                }
+            }
+            floatingCta.addEventListener("click", (event) => {
+                event.preventDefault();
+                chatbotContainer.classList.toggle("hidden");
+                chatbotContainer.classList.toggle("flex");
+                if (!chatbotContainer.classList.contains("hidden")) {
+                    chatbotInput.focus();
+                    if (chatbotMessages.querySelectorAll('.chatbot-message').length === 0) {
+                        loadChatHistory();
+                        if (chatHistory.length === 0) {
+                            addMessageToUI("Hello! 👋 I'm A-Zentrix Assistant. How can I assist your business today?", 'bot');
+                        }
+                    }
+                }
+            });
+            closeChatbot.addEventListener("click", () => {
+                chatbotContainer.classList.add("hidden");
+                chatbotContainer.classList.remove("flex");
+            });
+            chatbotSendButton.addEventListener("click", handleSendMessage);
+            chatbotInput.addEventListener("keypress", (event) => {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    handleSendMessage();
+                }
+            });
+            const glowElement = document.createElement('div');
+            glowElement.id = 'cursor-glow';
+            document.body.appendChild(glowElement);
+            document.addEventListener('mousemove', (e) => {
+                glowElement.style.left = `${e.clientX}px`;
+                glowElement.style.top = `${e.clientY}px`;
+            });
+            document.documentElement.addEventListener('mouseenter', () => {
+                glowElement.style.opacity = '1';
+            });
+            document.documentElement.addEventListener('mouseleave', () => {
+                glowElement.style.opacity = '0';
+            });
+
+            // --- Single Page Application (SPA) Navigation Logic ---
+            const homeContent = document.getElementById('home-content-sections');
+            const contentPageSections = document.querySelectorAll('.content-page-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            function showPage(targetId) {
+                // Hide all content sections first
+                homeContent.style.display = 'none';
+                contentPageSections.forEach(section => {
+                    section.classList.remove('active');
+                    section.style.display = 'none';
+                });
+
+                // Determine which section to show
+                let sectionToShow = null;
+                if (targetId === '' || targetId === 'home' || targetId.startsWith('solutions') || targetId.startsWith('faq') || targetId.startsWith('newsletter') || targetId.startsWith('our-journey')) {
+                    // If it's a direct home link or a section within the home content, show home
+                    homeContent.style.display = 'block';
+                    // Scroll to specific part of home content if a hash is provided
+                    if (targetId && targetId !== 'home') {
+                        // Defer scrolling to allow content to render
+                        setTimeout(() => {
+                            const el = document.getElementById(targetId);
+                            if (el) {
+                                el.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                            }
+                        }, 100);
+                    } else {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    }
+                    document.title = "A-Zentrix - AI Assistant"; // Reset title for home
+                } else {
+                    // Otherwise, show the specific content page section
+                    sectionToShow = document.getElementById(targetId);
+                    if (sectionToShow) {
+                        sectionToShow.classList.add('active');
+                        sectionToShow.style.display = 'flex'; // Use flex for centering if defined in CSS
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        }); // Scroll to top of new page
+                        // Update title
+                        const titleElement = sectionToShow.querySelector('h1');
+                        if (titleElement) {
+                            document.title = titleElement.textContent.trim() + " - A-Zentrix";
+                        }
+                    } else {
+                        // Fallback to home if target not found
+                        homeContent.style.display = 'block';
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                        document.title = "A-Zentrix - AI Assistant";
+                    }
+                }
+            }
+
+            // Handle initial page load based on URL hash
+            function handleHashChange() {
+                const hash = window.location.hash.substring(1); // Remove '#'
+                showPage(hash);
+            }
+
+            // Attach event listeners to all internal navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default link behavior
+                    const targetId = link.getAttribute('href').substring(1); // Get target section ID
+
+                    // Update URL hash without reloading
+                    history.pushState(null, '', `#${targetId}`);
+                    showPage(targetId);
+                });
+            });
+
+            // Handle form submissions to direct to correct section
+            const newsletterForm = document.getElementById('newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', (event) => {
+                    event.preventDefault(); // Prevent default form submission
+                    const targetId = newsletterForm.getAttribute('action').substring(1);
+                    history.pushState(null, '', `#${targetId}`);
+                    showPage(targetId);
+                    newsletterForm.reset(); // Clear the form after submission
+                });
+            }
+
+            const signupForm = document.getElementById('signup-form');
+            if (signupForm) {
+                signupForm.addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    const targetId = signupForm.getAttribute('action').substring(1);
+                    history.pushState(null, '', `#${targetId}`);
+                    showPage(targetId);
+                    signupForm.reset();
+                    alert("Account created successfully (simulated)! Redirecting to home.");
+                });
+            }
+
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    const targetId = contactForm.getAttribute('action').substring(1);
+                    history.pushState(null, '', `#${targetId}`);
+                    showPage(targetId);
+                    contactForm.reset();
+                    alert("Message sent successfully (simulated)! Redirecting to home.");
+                });
+            }
+
+            // Listen for browser back/forward buttons
+            window.addEventListener('popstate', handleHashChange);
+
+            // Initial call to display the correct content on page load
+            handleHashChange();
+
+            // Blog "Read More" logic (moved from blog.html)
+            const blogReadMoreBtn1 = document.getElementById('blog-read-more-btn-1');
+            const blogExpandableContent1 = document.getElementById('blog-expandable-content-1');
+
+            if (blogReadMoreBtn1 && blogExpandableContent1) {
+                blogReadMoreBtn1.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default link behavior
+
+                    // Toggle visibility of the expandable content
+                    blogExpandableContent1.classList.toggle('hidden');
+
+                    // Change button text
+                    if (blogExpandableContent1.classList.contains('hidden')) {
+                        blogReadMoreBtn1.innerHTML = 'Read More →';
+                    } else {
+                        blogReadMoreBtn1.innerHTML = 'Read Less ↑';
+                    }
+                });
+            }
+
         });
-      });.
+
+        window.addEventListener("load", () => {
+            const loadingOverlay = document.getElementById("loading");
+            if (loadingOverlay) {
+                setTimeout(() => {
+                    loadingOverlay.style.opacity = "0";
+                    loadingOverlay.addEventListener('transitionend', () => {
+                        if (loadingOverlay.style.opacity === "0") loadingOverlay.style.display = "none";
+                    }, {
+                        once: true
+                    });
+                }, 200);
+            }
+        });
     </script>
-  </body>
+</body>
+
 </html>
